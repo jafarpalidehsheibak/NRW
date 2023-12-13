@@ -30,5 +30,5 @@ Route::group(['prefix' => 'v1'],function(){
 });
 
 Route::group(['prefix'=>'v1'],function (){
-    Route::resource('news','NewsController');
+    Route::resource('news','App\Http\Controllers\Admin\NewsController');
 });
