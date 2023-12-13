@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\NewsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,15 +20,15 @@ use Illuminate\Support\Facades\Route;
 //    return $request->user();
 //});
 
-//Route::group(['prefix' => 'v1'],function(){
-//    Route::group(['prefix' => 'auth'], function () {
-//        Route::post('/login', [AuthController::class,'login']);
-//        Route::post('/logout', [AuthController::class,'logout']);
-//        Route::post('/refresh', [AuthController::class,'refresh']);
-//        Route::post('/me', [AuthController::class,'me']);
-//    });
-//});
+Route::group(['prefix' => 'v1'],function(){
+    Route::group(['prefix' => 'auth'], function () {
+        Route::post('/login', [AuthController::class,'login']);
+        Route::post('/logout', [AuthController::class,'logout']);
+        Route::post('/refresh', [AuthController::class,'refresh']);
+        Route::post('/me', [AuthController::class,'me']);
+    });
+});
 
-Route::get('/index',function (){
-    return "hi";
+Route::group(['prefix'=>'v1'],function (){
+    Route::resource('news','NewsController');
 });
