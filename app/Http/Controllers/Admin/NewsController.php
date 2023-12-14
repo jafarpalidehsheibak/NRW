@@ -7,11 +7,16 @@ use Illuminate\Http\Request;
 
 class NewsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
+
     public function index()
     {
         return response()->json([
-            'data'=>'all data'
-        ],200);
+            'data' => auth()->user()->role,
+        ], 200);
     }
 
     public function store(Request $request)

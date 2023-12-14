@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\NewsController;
+use App\Http\Controllers\Admin\v1\SupervisorController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -30,5 +31,6 @@ Route::group(['prefix' => 'v1'],function(){
 });
 
 Route::group(['prefix'=>'v1'],function (){
-    Route::resource('news','App\Http\Controllers\Admin\NewsController');
+   Route::get('/index',[NewsController::class,'index']);
+   Route::get('/supervisor',[SupervisorController::class,'index']);
 });
