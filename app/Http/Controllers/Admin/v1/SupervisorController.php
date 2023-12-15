@@ -7,6 +7,8 @@ use App\Http\Resources\SupervisorResource;
 use App\Http\Resources\UserResource;
 use App\Models\Supervisor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class SupervisorController extends Controller
 {
@@ -18,9 +20,51 @@ class SupervisorController extends Controller
 
     public function index()
     {
-        $supervisors = Supervisor::where('role','=',11)->get();
+        $supervisors = Supervisor::where('role_id','=',3)->get();
         return response()->json([
             'data'=>SupervisorResource::collection($supervisors)
             ],200);
+    }
+
+    public function store(Request $request)
+    {
+        $this->validate($request,[
+            'name'=>'required|string|min:3|max:255',
+            'email'=>'required|digits:11|numeric|regex:/(0)[0-9]{10}/|unique:users',
+            'password'=>'required|string|min:8|max:255',
+        ]);
+        $password = Hash::make($request->input('password'));
+        $res = Supervisor::create([
+            'name'=>$request->input('name'),
+            'email'=>$request->input('email'),
+            'password'=>$password,
+            'role_id'=>3
+        ]);
+        if ($res){
+            return response()->json([
+                'data'=>'رکورد مورد نظر با موفقیت ایجاد شد'
+            ]);
+        }
+    }
+
+    public function show($id)
+    {
+        $supervisor = Supervisor::query()
+            ->where('id','=',$id)
+            ->where('role_id','=',3)
+            ->get();
+        if ($supervisor->count()==0){
+            return response()->json([
+                'message'=>'رکوردی مورد نظر یافت نشد'
+            ]);
+        }
+        else{
+            return response()->json([
+                'data'=>[
+                    'name'=> $supervisor[0]['name'],
+                    'email'=>$supervisor[0]['email'],
+                ]
+            ],200);
+        }
     }
 }

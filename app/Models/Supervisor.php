@@ -14,7 +14,7 @@ class Supervisor extends Authenticatable implements JWTSubject
     use HasApiTokens, HasFactory, Notifiable;
     protected $table = 'users';
     protected $fillable = [
-        'name','email','password','role'
+        'name','email','password','role_id'
     ];
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
