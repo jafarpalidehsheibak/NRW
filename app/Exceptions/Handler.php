@@ -5,6 +5,8 @@ namespace App\Exceptions;
 use ErrorException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -26,16 +28,19 @@ class Handler extends ExceptionHandler
     public function register(): void
     {
         $this->reportable(function (Throwable $e) {
-            if($e instanceof ErrorException ){
-                return response()->json([
-                    'message'=>'رکورد مورد نظر یافت نشد'
-                ]);
-            }
-            if ($e instanceof ModelNotFoundException){
-                return response()->json([
-                    'message'=>'رکورد مورد نظر یافت نشد'
-                ]);
-            }
+
+        });
+        $this->renderable(function (MethodNotAllowedHttpException $e, $request) {
+            return response()->json([
+                'status' => 405,
+                'message' => 'Method Not Allowed'
+            ], 405);
+        });
+        $this->renderable(function (NotFoundHttpException $e, $request) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'The Route Not Found'
+            ], 405);
         });
     }
 }
