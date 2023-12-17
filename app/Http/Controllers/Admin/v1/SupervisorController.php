@@ -43,7 +43,7 @@ class SupervisorController extends Controller
         if ($res){
             return response()->json([
                 'data'=>'رکورد مورد نظر با موفقیت ایجاد شد'
-            ]);
+            ],201);
         }
     }
 
@@ -64,6 +64,62 @@ class SupervisorController extends Controller
                     'name'=> $supervisor[0]['name'],
                     'email'=>$supervisor[0]['email'],
                 ]
+            ],200);
+        }
+    }
+
+    public function update(Request $request,$id)
+    {
+        $supervisor = Supervisor::query()->where('id','=',$id)
+            ->where('role_id','=',3)
+            ->get();
+        if ($supervisor->count()==0){
+            return response()->json([
+                'message'=>'رکورد مورد نظر یافت نشد'
+            ]);
+        }
+        else{
+            $this->validate($request,[
+                'name'=>'required|string|min:3|max:255',
+                'email'=>'required|digits:11|numeric|regex:/(0)[0-9]{10}/|unique:users,email,' . $id,
+                'password'=>'nullable|string|min:8|max:255',
+            ]);
+            if ($request->has('password')){
+                $password = Hash::make($request->input('password'));
+                $supervisor->first()->update([
+                    'name'=>$request->input('name'),
+                    'email'=>$request->input('email'),
+                    'password'=>$password,
+                ]);
+            }
+            else{
+                $supervisor->first()->update([
+                    'name'=>$request->input('name'),
+                    'email'=>$request->input('email'),
+                ]);
+            }
+            return response()->json([
+                'data'=>'رکورد مورد نظر با موفقیت ویرایش شد'
+            ],201);
+        }
+    }
+
+    public function destroy($id)
+    {
+        $supervisor = Supervisor::query()
+            ->where('id','=',$id)
+            ->where('role_id','=',3)
+            ->get();
+//        dd($supervisor);
+        if ($supervisor->count()==0){
+            return response()->json([
+                'message'=>'رکورد مورد نظر یافت نشد'
+            ]);
+        }
+        else{
+             $supervisor->first()->delete();
+            return response()->json([
+                'data'=>'رکورد مورد نظر با موفقیت حذف شد'
             ],200);
         }
     }

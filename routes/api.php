@@ -35,4 +35,6 @@ Route::group(['prefix'=>'v1'],function (){
    Route::get('/supervisor',[SupervisorController::class,'index']);
    Route::post('/supervisor',[SupervisorController::class,'store']);
    Route::get('/supervisor/{id}',[SupervisorController::class,'show']);
+   Route::put('/supervisor/{id}',[SupervisorController::class,'update']);
+   Route::delete('/supervisor/{id}',[SupervisorController::class,'destroy']);
 });
