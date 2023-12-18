@@ -3,31 +3,26 @@
 namespace App\Http\Controllers\Admin\v1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\SupervisorResource;
-use App\Http\Resources\UserResource;
-use App\Models\Supervisor;
+use App\Models\SafetyConsultant;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
-class SupervisorController extends Controller
+class SaftyConsultantController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth:api');
     }
-
     public function index()
     {
-        $supervisors = Supervisor::where('role_id', '=', 3)->get();
+        $safety_consultant = SafetyConsultant::where('role_id', '=', 4)->get();
         return response()->json([
             'data' => [
-                'name' => $supervisors->name,
-                'username' => $supervisors->email,
+                'name' => $safety_consultant[0]->name,
+                'username' => $safety_consultant[0]->email,
             ]
         ], 200);
     }
-
     public function store(Request $request)
     {
         $this->validate($request, [
@@ -36,11 +31,11 @@ class SupervisorController extends Controller
             'password' => 'required|string|min:8|max:255',
         ]);
         $password = Hash::make($request->input('password'));
-        $res = Supervisor::create([
+        $res = SafetyConsultant::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'password' => $password,
-            'role_id' => 3
+            'role_id' => 4
         ]);
         if ($res) {
             return response()->json([
@@ -52,51 +47,49 @@ class SupervisorController extends Controller
             ], 201);
         }
     }
-
     public function show($id)
     {
-        $supervisor = Supervisor::query()
+        $safety_consultant = SafetyConsultant::query()
             ->where('id', '=', $id)
-            ->where('role_id', '=', 3)
+            ->where('role_id', '=', 4)
             ->get();
-        if ($supervisor->count() == 0) {
+        if ($safety_consultant->count() == 0) {
             return response()->json([
                 'message' => 'رکوردی مورد نظر یافت نشد'
             ]);
         } else {
             return response()->json([
                 'data' => [
-                    'name' => $supervisor[0]['name'],
-                    'email' => $supervisor[0]['email'],
+                    'name' => $safety_consultant[0]['name'],
+                    'email' => $safety_consultant[0]['email'],
                 ]
             ], 200);
         }
     }
-
     public function update(Request $request, $id)
     {
-        $supervisor = Supervisor::query()->where('id', '=', $id)
-            ->where('role_id', '=', 3)
+        $safety_consultant = SafetyConsultant::query()->where('id', '=', $id)
+            ->where('role_id', '=', 4)
             ->get();
-        if ($supervisor->count() == 0) {
+        if ($safety_consultant->count() == 0) {
             return response()->json([
                 'message' => 'رکورد مورد نظر یافت نشد'
             ]);
         } else {
-            $this->validate($request, [
+           $this->validate($request, [
                 'name' => 'required|string|min:3|max:255',
                 'email' => 'required|digits:11|numeric|regex:/(0)[0-9]{10}/|unique:users,email,' . $id,
                 'password' => 'nullable|string|min:8|max:255',
             ]);
             if ($request->has('password')) {
                 $password = Hash::make($request->input('password'));
-                $supervisor->first()->update([
+                $safety_consultant->first()->update([
                     'name' => $request->input('name'),
                     'email' => $request->input('email'),
                     'password' => $password,
                 ]);
             } else {
-                $supervisor->first()->update([
+                $safety_consultant->first()->update([
                     'name' => $request->input('name'),
                     'email' => $request->input('email'),
                 ]);
@@ -106,23 +99,24 @@ class SupervisorController extends Controller
             ], 201);
         }
     }
-
     public function destroy($id)
     {
-        $supervisor = Supervisor::query()
+        $safety_consultant = SafetyConsultant::query()
             ->where('id', '=', $id)
-            ->where('role_id', '=', 3)
+            ->where('role_id', '=', 4)
             ->get();
-//        dd($supervisor);
-        if ($supervisor->count() == 0) {
+        if ($safety_consultant->count() == 0) {
             return response()->json([
                 'message' => 'رکورد مورد نظر یافت نشد'
             ]);
         } else {
-            $supervisor->first()->delete();
+            $safety_consultant->first()->delete();
             return response()->json([
                 'data' => 'رکورد مورد نظر با موفقیت حذف شد'
             ], 200);
         }
     }
+
+
+
 }

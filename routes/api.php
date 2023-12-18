@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\NewsController;
+use App\Http\Controllers\Admin\v1\SaftyConsultantController;
 use App\Http\Controllers\Admin\v1\SupervisorController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -37,4 +38,12 @@ Route::group(['prefix'=>'v1'],function (){
    Route::get('/supervisor/{id}',[SupervisorController::class,'show']);
    Route::put('/supervisor/{id}',[SupervisorController::class,'update']);
    Route::delete('/supervisor/{id}',[SupervisorController::class,'destroy']);
+
+    Route::get('/safety_consultant',[SaftyConsultantController::class,'index']);
+    Route::post('/safety_consultant',[SaftyConsultantController::class,'store']);
+    Route::get('/safety_consultant/{id}',[SaftyConsultantController::class,'show']);
+    Route::put('/safety_consultant/{id}',[SaftyConsultantController::class,'update']);
+    Route::delete('/safety_consultant/{id}',[SaftyConsultantController::class,'destroy']);
+
+
 });
