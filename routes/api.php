@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\NewsController;
+use App\Http\Controllers\Admin\v1\SafetyContractorController;
 use App\Http\Controllers\Admin\v1\SaftyConsultantController;
 use App\Http\Controllers\Admin\v1\SupervisorController;
 use Illuminate\Http\Request;
@@ -44,6 +45,12 @@ Route::group(['prefix'=>'v1'],function (){
     Route::get('/safety_consultant/{id}',[SaftyConsultantController::class,'show']);
     Route::put('/safety_consultant/{id}',[SaftyConsultantController::class,'update']);
     Route::delete('/safety_consultant/{id}',[SaftyConsultantController::class,'destroy']);
+
+    Route::get('/safety_contractor',[SafetyContractorController::class,'index']);
+    Route::post('/safety_contractor',[SafetyContractorController::class,'store']);
+    Route::get('/safety_contractor/{id}',[SafetyContractorController::class,'show']);
+    Route::put('/safety_contractor/{id}',[SafetyContractorController::class,'update']);
+    Route::delete('/safety_contractor/{id}',[SafetyContractorController::class,'destroy']);
 
 
 });

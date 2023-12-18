@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -16,7 +17,7 @@ class AuthController extends Controller
     public function login()
     {
         $credentials = request(['email', 'password']);
-        if (! $token = auth('api')->attempt($credentials)) {
+        if (!$token = auth('api')->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
@@ -25,8 +26,8 @@ class AuthController extends Controller
 
     public function me()
     {
-        $user = new UserResource(auth()->user());
-        return response()->json($user );
+        $user = new UserResource(auth('api')->user());
+        return response()->json($user);
     }
 
     public function logout()
@@ -46,7 +47,10 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth('api')->factory()->getTTL() * 480
+            'expires_in' => auth('api')->factory()->getTTL() * 480,
+            'name' => auth('api')->user()->name,
+            'username' => auth('api')->user()->email,
+            'role' => auth('api')->user()->role_id,
         ]);
     }
 }
