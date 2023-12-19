@@ -35,4 +35,9 @@ class Supervisor extends Authenticatable implements JWTSubject
     {
         return [];
     }
+    protected $hidden = [
+        'password',
+        'remember_token',
+        'created_at',
+    ];
 }

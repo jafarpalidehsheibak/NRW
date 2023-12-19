@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -37,6 +38,12 @@ class Handler extends ExceptionHandler
             ], 405);
         });
         $this->renderable(function (NotFoundHttpException $e, $request) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'The Route Not Found'
+            ], 405);
+        });
+        $this->renderable(function (RouteNotFoundException $e, $request) {
             return response()->json([
                 'status' => 404,
                 'message' => 'The Route Not Found'

@@ -21,10 +21,7 @@ class SupervisorController extends Controller
     {
         $supervisors = Supervisor::where('role_id', '=', 3)->get();
         return response()->json([
-            'data' => [
-                'name' => $supervisors->name,
-                'username' => $supervisors->email,
-            ]
+            'data' =>SupervisorResource::collection($supervisors)
         ], 200);
     }
 

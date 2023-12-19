@@ -34,6 +34,7 @@ Route::group(['prefix' => 'v1'],function(){
 
 Route::group(['prefix'=>'v1'],function (){
    Route::get('/index',[NewsController::class,'index']);
+
    Route::get('/supervisor',[SupervisorController::class,'index']);
    Route::post('/supervisor',[SupervisorController::class,'store']);
    Route::get('/supervisor/{id}',[SupervisorController::class,'show']);
