@@ -33,20 +33,17 @@ class Handler extends ExceptionHandler
         });
         $this->renderable(function (MethodNotAllowedHttpException $e, $request) {
             return response()->json([
-                'status' => 405,
-                'message' => 'Method Not Allowed'
+                'message' => 'MethodNotAllowedHttpException'
             ], 405);
         });
         $this->renderable(function (NotFoundHttpException $e, $request) {
             return response()->json([
-                'status' => 404,
-                'message' => 'The Route Not Found'
+                'message' => 'NotFoundHttpException'
             ], 405);
         });
         $this->renderable(function (RouteNotFoundException $e, $request) {
             return response()->json([
-                'status' => 404,
-                'message' => 'The Route Not Found'
+                'message' => 'RouteNotFoundException'
             ], 405);
         });
     }
