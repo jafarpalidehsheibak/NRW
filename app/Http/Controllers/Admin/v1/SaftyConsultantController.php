@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\SafetyConsultantCollection;
+use App\Http\Resources\SafetyConsultantResource;
 use App\Models\SafetyConsultant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -15,13 +17,10 @@ class SaftyConsultantController extends Controller
     }
     public function index()
     {
-        $safety_consultant = SafetyConsultant::where('role_id', '=', 4)->get();
-        return response()->json([
-            'data' => [
-                'name' => $safety_consultant[0]->name,
-                'username' => $safety_consultant[0]->email,
-            ]
-        ], 200);
+        $safety_consultant = SafetyConsultant::where('role_id', '=', 4)->paginate(5);
+        return response()->json(
+            new SafetyConsultantCollection($safety_consultant)
+        , 200);
     }
     public function store(Request $request)
     {

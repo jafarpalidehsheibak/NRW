@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class SupervisorResource extends JsonResource
+class SafetyConsultantResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,7 +17,6 @@ class SupervisorResource extends JsonResource
         return [
             'name'=>$this->name,
             'username'=>$this->email,
-
         ];
     }
 }

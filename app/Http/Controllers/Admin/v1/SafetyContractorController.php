@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\SafetyContractorResource;
+use App\Http\Resources\SafetyContratctorCollection;
 use App\Models\SafetyContractor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -15,13 +17,10 @@ class SafetyContractorController extends Controller
     }
     public function index()
     {
-        $safety_contractor = SafetyContractor::where('role_id', '=', 5)->get();
-        return response()->json([
-            'data' => [
-                'name' => $safety_contractor[0]->name,
-                'username' => $safety_contractor[0]->email,
-            ]
-        ], 200);
+        $safety_contractor = SafetyContractor::where('role_id', '=', 5)->paginate(5);
+        return response()->json(
+           new SafetyContratctorCollection($safety_contractor)
+        , 200);
     }
     public function store(Request $request)
     {

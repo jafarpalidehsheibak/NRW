@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\SupervisorCollection;
 use App\Http\Resources\SupervisorResource;
 use App\Http\Resources\UserResource;
 use App\Models\Supervisor;
@@ -19,10 +20,10 @@ class SupervisorController extends Controller
 
     public function index()
     {
-        $supervisors = Supervisor::where('role_id', '=', 3)->get();
-        return response()->json([
-            'data' =>SupervisorResource::collection($supervisors)
-        ], 200);
+        $supervisors = Supervisor::where('role_id', '=', 3)->paginate(5);
+        return response()->json(
+            new SupervisorCollection($supervisors)
+        , 200);
     }
 
     public function store(Request $request)
@@ -42,10 +43,8 @@ class SupervisorController extends Controller
         if ($res) {
             return response()->json([
                 'data' => [
-                    'name' => $res->name,
-                    'username' => $res->email,
+                    'message' => 'رکورد مورد نظر با موفقیت ایجاد شد'
                 ],
-                'message' => 'رکورد مورد نظر با موفقیت ایجاد شد'
             ], 201);
         }
     }
@@ -64,7 +63,7 @@ class SupervisorController extends Controller
             return response()->json([
                 'data' => [
                     'name' => $supervisor[0]['name'],
-                    'email' => $supervisor[0]['email'],
+                    'username' => $supervisor[0]['email'],
                 ]
             ], 200);
         }
