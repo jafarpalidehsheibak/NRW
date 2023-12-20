@@ -20,7 +20,7 @@ class SupervisorController extends Controller
 
     public function index()
     {
-        $supervisors = Supervisor::where('role_id', '=', 3)->paginate(5);
+        $supervisors = Supervisor::where('role_id', '=', 3)->paginate(1);
         return response()->json(
             new SupervisorCollection($supervisors)
         , 200);
