@@ -17,7 +17,7 @@ class SaftyConsultantController extends Controller
     }
     public function index()
     {
-        $safety_consultant = SafetyConsultant::where('role_id', '=', 4)->paginate(5);
+        $safety_consultant = SafetyConsultant::where('role_id', '=', 4)->paginate(10);
         return response()->json(
             new SafetyConsultantCollection($safety_consultant)
         , 200);

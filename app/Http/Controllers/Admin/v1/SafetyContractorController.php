@@ -17,7 +17,7 @@ class SafetyContractorController extends Controller
     }
     public function index()
     {
-        $safety_contractor = SafetyContractor::where('role_id', '=', 5)->paginate(5);
+        $safety_contractor = SafetyContractor::where('role_id', '=', 5)->paginate(10);
         return response()->json(
            new SafetyContratctorCollection($safety_contractor)
         , 200);
