@@ -8,7 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Profile extends Model
 {
     use HasFactory;
-
+protected $fillable = [
+    'phone_number',
+    'user_id',
+    'expert_id',
+    'province_id',
+];
 
     public function province()
     {
@@ -18,5 +23,9 @@ class Profile extends Model
     public function expert()
     {
      return $this->belongsTo(Expert::class);
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

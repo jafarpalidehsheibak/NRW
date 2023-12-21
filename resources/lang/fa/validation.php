@@ -44,7 +44,7 @@ return [
     'distinct'         => ':attribute مقدار تکراری دارد.',
     "email"            => "فرمت :attribute معتبر نیست.",
     'ends_with'        => ':attribute باید با این مقدار تمام شود: :values.',
-    "exists"           => ":attribute انتخاب شده،  قبلا ثبت نام نکرده است.",
+    "exists"           => ":attribute انتخاب شده،  در دیتابیس وجود ندارد.",
     'file' 	       => 'فیلد :attribute باید فایل باشد.',
     "filled"           => "فیلد :attribute الزامی است",
     'gt' => [
@@ -241,6 +241,8 @@ return [
         'unit_id'=>'واحد پرسنلی',
         'person_family'=>' نام خانوادگی پرسنل',
         'company_id'=>'نام شرکت',
+        'expert'=>'تخصص',
+        'province'=>'استان',
 
 
 

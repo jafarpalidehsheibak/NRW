@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\SupervisorCollection;
 use App\Http\Resources\SupervisorResource;
 use App\Http\Resources\UserResource;
+use App\Models\Profile;
 use App\Models\Supervisor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,7 +21,13 @@ class SupervisorController extends Controller
 
     public function index()
     {
-        $supervisors = Supervisor::where('role_id', '=', 3)->paginate(10);
+//        $supervisors = Supervisor::where('role_id', '=', 3)->paginate(10);
+        $supervisors =DB::table('users')
+            ->join('profiles','users.id','=','profiles.user_id')
+            ->join('roles','roles.id','=','users.role_id')
+            ->join('provinces','provinces.id','=','profiles.province_id')
+            ->join('experts','experts.id','=','profiles.expert_id')
+            ->where('users.role_id','=',3)->paginate(10);
         return response()->json(
             new SupervisorCollection($supervisors)
         , 200);
@@ -30,42 +37,64 @@ class SupervisorController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|string|min:3|max:255',
-            'email' => 'required|digits:11|numeric|regex:/(0)[0-9]{10}/|unique:users',
+            'email' => 'required|digits:11|numeric|regex:/(09)[0-9]{9}/|unique:users',
             'password' => 'required|string|min:8|max:255',
+            'phone_number' => 'nullable|digits:11|regex:/(0)[0-9]{10}/|numeric|',
+            'expert' => 'nullable|numeric|exists:experts,id',
+            'province' => 'nullable|numeric|exists:provinces,id',
         ]);
-        $password = Hash::make($request->input('password'));
-        $res = Supervisor::create([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'password' => $password,
-            'role_id' => 3
-        ]);
-        if ($res) {
+        try {
+            DB::beginTransaction();
+            $password = Hash::make($request->input('password'));
+            $res = Supervisor::create([
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+                'password' => $password,
+                'role_id' => 3
+            ]);
+            $res2 = Profile::create([
+                'phone_number' => $request->input('phone_number'),
+                'user_id' => $res->id,
+                'expert_id' => $request->input('expert'),
+                'province_id' => $request->input('province'),
+            ]);
+            DB::commit();
+            if ($res && $res2) {
+                return response()->json([
+                    'data' => [
+                        'message' => 'رکورد مورد نظر با موفقیت ایجاد شد'
+                    ],
+                ], 201);
+            }
+        }
+        catch (\Exception $e){
+            DB::rollBack();
             return response()->json([
                 'data' => [
-                    'message' => 'رکورد مورد نظر با موفقیت ایجاد شد'
+                    'message' => 'خطا در ثبت اطلاعات'
                 ],
-            ], 201);
+            ], 400);
         }
     }
 
     public function show($id)
     {
-        $supervisor = Supervisor::query()
-            ->where('id', '=', $id)
-            ->where('role_id', '=', 3)
-            ->get();
+        $supervisor =DB::table('users')
+            ->join('profiles','users.id','=','profiles.user_id')
+            ->join('roles','roles.id','=','users.role_id')
+            ->join('provinces','provinces.id','=','profiles.province_id')
+            ->join('experts','experts.id','=','profiles.expert_id')
+            ->where('users.role_id','=',3)
+            ->where('users.id','=',$id)
+            ->paginate(10);
         if ($supervisor->count() == 0) {
             return response()->json([
                 'message' => 'رکوردی مورد نظر یافت نشد'
             ]);
         } else {
-            return response()->json([
-                'data' => [
-                    'name' => $supervisor[0]['name'],
-                    'username' => $supervisor[0]['email'],
-                ]
-            ], 200);
+            return response()->json(
+                new SupervisorCollection($supervisor)
+                , 200);
         }
     }
 

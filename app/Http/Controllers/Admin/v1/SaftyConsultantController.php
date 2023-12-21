@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Admin\v1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\SafetyConsultantCollection;
 use App\Http\Resources\SafetyConsultantResource;
+use App\Models\Profile;
 use App\Models\SafetyConsultant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class SaftyConsultantController extends Controller
@@ -17,7 +19,13 @@ class SaftyConsultantController extends Controller
     }
     public function index()
     {
-        $safety_consultant = SafetyConsultant::where('role_id', '=', 4)->paginate(10);
+//        $safety_consultant = SafetyConsultant::where('role_id', '=', 4)->paginate(10);
+        $safety_consultant =DB::table('users')
+            ->join('profiles','users.id','=','profiles.user_id')
+            ->join('roles','roles.id','=','users.role_id')
+            ->join('provinces','provinces.id','=','profiles.province_id')
+            ->join('experts','experts.id','=','profiles.expert_id')
+            ->where('users.role_id','=',4)->paginate(10);
         return response()->json(
             new SafetyConsultantCollection($safety_consultant)
         , 200);
@@ -26,24 +34,44 @@ class SaftyConsultantController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|string|min:3|max:255',
-            'email' => 'required|digits:11|numeric|regex:/(0)[0-9]{10}/|unique:users',
+            'email' => 'required|digits:11|numeric|regex:/(09)[0-9]{9}/|unique:users',
             'password' => 'required|string|min:8|max:255',
+            'phone_number' => 'nullable|digits:11|regex:/(0)[0-9]{10}/|numeric|',
+            'expert' => 'nullable|numeric|exists:experts,id',
+            'province' => 'nullable|numeric|exists:provinces,id',
         ]);
-        $password = Hash::make($request->input('password'));
-        $res = SafetyConsultant::create([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'password' => $password,
-            'role_id' => 4
-        ]);
-        if ($res) {
+
+        try {
+            DB::beginTransaction();
+            $password = Hash::make($request->input('password'));
+            $res = SafetyConsultant::create([
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+                'password' => $password,
+                'role_id' => 4
+            ]);
+            $res2 = Profile::create([
+                'phone_number' => $request->input('phone_number'),
+                'user_id' => $res->id,
+                'expert_id' => $request->input('expert'),
+                'province_id' => $request->input('province'),
+            ]);
+            DB::commit();
+            if ($res && $res2) {
+                return response()->json([
+                    'data' => [
+                        'message' => 'رکورد مورد نظر با موفقیت ایجاد شد'
+                    ],
+                ], 201);
+            }
+        }
+        catch (\Exception $e){
+            DB::rollBack();
             return response()->json([
                 'data' => [
-                    'name' => $res->name,
-                    'username' => $res->email,
+                    'message' => 'خطا در ثبت اطلاعات'
                 ],
-                'message' => 'رکورد مورد نظر با موفقیت ایجاد شد'
-            ], 201);
+            ], 400);
         }
     }
     public function show($id)

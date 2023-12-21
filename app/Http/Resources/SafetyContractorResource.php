@@ -18,6 +18,9 @@ class SafetyContractorResource extends JsonResource
             'id'=>$this->id,
             'name'=>$this->name,
             'username'=>$this->email,
+            'phone_number'=>$this->phone_number,
+            'expert'=>$this->name_expert,
+            'province'=>$this->province_name,
         ];
     }
 }

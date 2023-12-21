@@ -7,6 +7,7 @@ use App\Http\Resources\SafetyContractorResource;
 use App\Http\Resources\SafetyContratctorCollection;
 use App\Models\SafetyContractor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class SafetyContractorController extends Controller
@@ -17,7 +18,13 @@ class SafetyContractorController extends Controller
     }
     public function index()
     {
-        $safety_contractor = SafetyContractor::where('role_id', '=', 5)->paginate(10);
+//        $safety_contractor = SafetyContractor::where('role_id', '=', 5)->paginate(10);
+        $safety_contractor =DB::table('users')
+            ->join('profiles','users.id','=','profiles.user_id')
+            ->join('roles','roles.id','=','users.role_id')
+            ->join('provinces','provinces.id','=','profiles.province_id')
+            ->join('experts','experts.id','=','profiles.expert_id')
+            ->where('users.role_id','=',5)->paginate(10);
         return response()->json(
            new SafetyContratctorCollection($safety_contractor)
         , 200);
