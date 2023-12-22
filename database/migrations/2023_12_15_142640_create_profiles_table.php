@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreign('expert_id')->references('id')->on('experts');
             $table->bigInteger('province_id')->nullable()->unsigned()->default(0);
             $table->foreign('province_id')->references('id')->on('provinces');
+            $table->string('address');
             $table->timestamps();
         });
     }

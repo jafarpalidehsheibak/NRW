@@ -13,6 +13,7 @@ protected $fillable = [
     'user_id',
     'expert_id',
     'province_id',
+    'address',
 ];
 
     public function province()

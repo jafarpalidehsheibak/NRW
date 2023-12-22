@@ -9,6 +9,7 @@ use App\Http\Resources\UserResource;
 use App\Models\Profile;
 use App\Models\Supervisor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -23,10 +24,10 @@ class SupervisorController extends Controller
     {
 //        $supervisors = Supervisor::where('role_id', '=', 3)->paginate(10);
         $supervisors = DB::table('users')
-            ->leftJoin('profiles', 'users.id', '=', 'profiles.user_id')
-            ->leftJoin('roles', 'roles.id', '=', 'users.role_id')
+            ->join('profiles', 'users.id', '=', 'profiles.user_id')
+            ->join('roles', 'roles.id', '=', 'users.role_id')
             ->leftJoin('experts', 'experts.id', '=', 'profiles.expert_id')
-            ->select('users.*','profiles.phone_number','roles.role_name','experts.name_expert')
+            ->select('users.*', 'profiles.phone_number', 'roles.role_name', 'experts.name_expert')
             ->where('users.role_id', '=', 3)->paginate(10);
         return response()->json(
             new SupervisorCollection($supervisors)
@@ -68,7 +69,7 @@ class SupervisorController extends Controller
             DB::rollBack();
             return response()->json([
                 'data' => [
-                    'message' => 'خطا در ثبت اطلاعات'
+                    'message' => 'خطا در ثبت اطلاعات' .$e->getMessage()
                 ],
             ], 400);
         }
@@ -76,11 +77,12 @@ class SupervisorController extends Controller
 
     public function show($id)
     {
+        $id = Crypt::decrypt($id);
         $supervisor = DB::table('users')
-            ->leftJoin('profiles', 'users.id', '=', 'profiles.user_id')
-            ->leftJoin('roles', 'roles.id', '=', 'users.role_id')
+            ->join('profiles', 'users.id', '=', 'profiles.user_id')
+            ->join('roles', 'roles.id', '=', 'users.role_id')
             ->leftJoin('experts', 'experts.id', '=', 'profiles.expert_id')
-            ->select('users.*','profiles.phone_number','roles.role_name','experts.name_expert')
+            ->select('users.*', 'profiles.phone_number', 'roles.role_name', 'experts.name_expert')
             ->where('users.role_id', '=', 3)
             ->where('users.id', '=', $id)
             ->paginate(10);
@@ -97,6 +99,7 @@ class SupervisorController extends Controller
 
     public function update(Request $request, $id)
     {
+        $id = Crypt::decrypt($id);
         $supervisor = Supervisor::query()->where('id', '=', $id)
             ->where('role_id', '=', 3)
             ->get();
@@ -162,34 +165,32 @@ class SupervisorController extends Controller
                         ],
                     ], 400);
                 }
-
             }
-
         }
     }
 
     public function destroy($id)
     {
+        $id = Crypt::decrypt($id);
         $supervisor = Supervisor::query()
             ->where('id', '=', $id)
             ->where('role_id', '=', 3)
             ->get();
-        $profile = Profile::query()->where('user_id', '=', $id)->get();
-        if ($supervisor->count() == 0 || $profile->count()==0) {
+        if ($supervisor->count() == 0) {
             return response()->json([
                 'message' => 'رکورد مورد نظر یافت نشد'
             ]);
         } else {
             try {
                 DB::beginTransaction();
-                $profile->first()->delete();
-                $supervisor->first()->delete();
+                $supervisor->first()->update([
+                    'status' => 0,
+                ]);
                 Db::commit();
                 return response()->json([
                     'data' => 'رکورد مورد نظر با موفقیت حذف شد'
                 ], 200);
-            }
-            catch (\Exception $e){
+            } catch (\Exception $e) {
                 DB::rollBack();
                 return response()->json([
                     'message' => 'خطا در حذف اطلاعات'
