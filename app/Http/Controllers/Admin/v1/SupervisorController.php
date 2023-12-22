@@ -23,10 +23,10 @@ class SupervisorController extends Controller
     {
 //        $supervisors = Supervisor::where('role_id', '=', 3)->paginate(10);
         $supervisors = DB::table('users')
-            ->join('profiles', 'users.id', '=', 'profiles.user_id')
-            ->join('roles', 'roles.id', '=', 'users.role_id')
-            ->join('provinces', 'provinces.id', '=', 'profiles.province_id')
-            ->join('experts', 'experts.id', '=', 'profiles.expert_id')
+            ->leftJoin('profiles', 'users.id', '=', 'profiles.user_id')
+            ->leftJoin('roles', 'roles.id', '=', 'users.role_id')
+            ->leftJoin('experts', 'experts.id', '=', 'profiles.expert_id')
+            ->select('users.*','profiles.phone_number','roles.role_name','experts.name_expert')
             ->where('users.role_id', '=', 3)->paginate(10);
         return response()->json(
             new SupervisorCollection($supervisors)
@@ -41,7 +41,6 @@ class SupervisorController extends Controller
             'password' => 'required|string|min:8|max:255',
             'phone_number' => 'nullable|digits:11|regex:/(0)[0-9]{10}/|numeric|',
             'expert' => 'nullable|numeric|exists:experts,id',
-            'province' => 'nullable|numeric|exists:provinces,id',
         ]);
         try {
             DB::beginTransaction();
@@ -56,7 +55,6 @@ class SupervisorController extends Controller
                 'phone_number' => $request->input('phone_number'),
                 'user_id' => $res->id,
                 'expert_id' => $request->input('expert'),
-                'province_id' => $request->input('province'),
             ]);
             DB::commit();
             if ($res && $res2) {
@@ -79,10 +77,10 @@ class SupervisorController extends Controller
     public function show($id)
     {
         $supervisor = DB::table('users')
-            ->join('profiles', 'users.id', '=', 'profiles.user_id')
-            ->join('roles', 'roles.id', '=', 'users.role_id')
-            ->join('provinces', 'provinces.id', '=', 'profiles.province_id')
-            ->join('experts', 'experts.id', '=', 'profiles.expert_id')
+            ->leftJoin('profiles', 'users.id', '=', 'profiles.user_id')
+            ->leftJoin('roles', 'roles.id', '=', 'users.role_id')
+            ->leftJoin('experts', 'experts.id', '=', 'profiles.expert_id')
+            ->select('users.*','profiles.phone_number','roles.role_name','experts.name_expert')
             ->where('users.role_id', '=', 3)
             ->where('users.id', '=', $id)
             ->paginate(10);
@@ -113,7 +111,6 @@ class SupervisorController extends Controller
                 'password' => 'nullable|string|min:8|max:255',
                 'phone_number' => 'nullable|digits:11|regex:/(0)[0-9]{10}/|numeric|',
                 'expert' => 'nullable|numeric|exists:experts,id',
-                'province' => 'nullable|numeric|exists:provinces,id',
             ]);
             if ($request->has('password')) {
                 try {
@@ -126,7 +123,6 @@ class SupervisorController extends Controller
                     $profile->first()->update([
                         'phone_number' => $request->input('phone_number'),
                         'expert_id' => $request->input('expert'),
-                        'province_id' => $request->input('province')
                     ]);
                     DB::commit();
                     return response()->json([
@@ -151,7 +147,6 @@ class SupervisorController extends Controller
                     $profile->first()->update([
                         'phone_number' => $request->input('phone_number'),
                         'expert_id' => $request->input('expert'),
-                        'province_id' => $request->input('province')
                     ]);
                     DB::commit();
                     return response()->json([
