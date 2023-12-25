@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\NewsController;
 use App\Http\Controllers\Admin\v1\SafetyContractorController;
 use App\Http\Controllers\Admin\v1\SaftyConsultantController;
 use App\Http\Controllers\Admin\v1\SupervisorController;
+use App\Http\Controllers\Admin\v1\SupervisorProvinceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -40,6 +41,12 @@ Route::group(['prefix'=>'v1'],function (){
    Route::get('/supervisor/{id}',[SupervisorController::class,'show']);
    Route::put('/supervisor/{id}',[SupervisorController::class,'update']);
    Route::delete('/supervisor/{id}',[SupervisorController::class,'destroy']);
+
+    Route::get('/supervisor-province',[SupervisorProvinceController::class,'index']);
+    Route::post('/supervisor-province',[SupervisorProvinceController::class,'store']);
+    Route::get('/supervisor-province/{id}',[SupervisorProvinceController::class,'show']);
+    Route::put('/supervisor-province/{id}',[SupervisorProvinceController::class,'update']);
+    Route::delete('/supervisor-province/{id}',[SupervisorProvinceController::class,'destroy']);
 
     Route::get('/safety_consultant',[SaftyConsultantController::class,'index']);
     Route::post('/safety_consultant',[SaftyConsultantController::class,'store']);
