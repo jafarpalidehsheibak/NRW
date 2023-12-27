@@ -28,7 +28,11 @@ class SupervisorController extends Controller
             ->join('roles', 'roles.id', '=', 'users.role_id')
             ->leftJoin('experts', 'experts.id', '=', 'profiles.expert_id')
             ->select('users.*', 'profiles.phone_number', 'roles.role_name', 'experts.name_expert')
-            ->where('users.role_id', '=', 3)->paginate(10);
+            ->where('users.role_id', '=', 3)
+            ->where('users.status', '=', 1)
+            ->paginate(10)
+
+        ;
         return response()->json(
             new SupervisorCollection($supervisors)
             , 200);
