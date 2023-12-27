@@ -27,7 +27,7 @@ class SupervisorController extends Controller
             ->join('profiles', 'users.id', '=', 'profiles.user_id')
             ->join('roles', 'roles.id', '=', 'users.role_id')
             ->leftJoin('experts', 'experts.id', '=', 'profiles.expert_id')
-            ->select('users.*', 'profiles.phone_number', 'roles.role_name', 'experts.name_expert')
+            ->select('users.*', 'profiles.phone_number', 'roles.role_name', 'experts.name_expert','experts.id as expertId')
             ->where('users.role_id', '=', 3)
             ->where('users.status', '=', 1)
             ->paginate(10)

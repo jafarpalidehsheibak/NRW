@@ -22,6 +22,7 @@ class SupervisorResource extends JsonResource
             'status'=>$this->status,
             'phone_number'=>$this->phone_number,
             'expert'=>$this->name_expert,
+            'expertId'=>$this->expertId,
 
         ];
     }
