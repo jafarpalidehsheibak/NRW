@@ -23,6 +23,8 @@ class SupervisorProvinceResource extends JsonResource
             'phone_number'=>$this->phone_number,
             'expert'=>$this->name_expert,
             'province'=>$this->province_name,
+            'expertId'=>$this->expertId,
+            'provinceId'=>$this->provinceId,
 
         ];
     }

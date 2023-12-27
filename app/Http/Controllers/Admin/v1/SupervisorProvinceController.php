@@ -26,7 +26,7 @@ class SupervisorProvinceController extends Controller
             ->leftJoin('experts', 'experts.id', '=', 'profiles.expert_id')
             ->leftJoin('provinces', 'provinces.id', '=', 'profiles.province_id')
             ->select('users.*', 'profiles.phone_number', 'roles.role_name', 'experts.name_expert'
-                , 'provinces.province_name')
+                ,'experts.id as expertId', 'provinces.province_name','provinces.id as provinceId')
             ->where('users.role_id', '=', 6)->paginate(10);
         return response()->json(
             new SupervisorProvinceCollection($supervisors)
