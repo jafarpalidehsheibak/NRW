@@ -12,7 +12,7 @@ class SupervisorProvince extends Model
     use HasApiTokens, HasFactory, Notifiable;
     protected $table = 'users';
     protected $fillable = [
-        'name','email','password','role_id'
+        'name','email','password','role_id','status'
     ];
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
