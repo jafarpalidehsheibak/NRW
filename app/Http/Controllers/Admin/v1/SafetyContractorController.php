@@ -155,7 +155,6 @@ class SafetyContractorController extends Controller
                     DB::beginTransaction();
                     $safety_contractor->first()->update([
                         'name' => $request->input('name'),
-                        'email' => $request->input('email'),
                     ]);
                     $profile->first()->update([
                         'phone_number' => $request->input('phone_number'),
