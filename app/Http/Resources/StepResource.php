@@ -18,6 +18,7 @@ class StepResource extends JsonResource
         return [
             'id'=>Crypt::encrypt($this->id),
             'step_name'=>$this->step_name,
+            'execution_time'=>$this->execution_time,
         ];
     }
 }
