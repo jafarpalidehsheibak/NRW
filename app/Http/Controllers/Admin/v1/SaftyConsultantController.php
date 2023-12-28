@@ -8,6 +8,7 @@ use App\Http\Resources\SafetyConsultantResource;
 use App\Models\Profile;
 use App\Models\SafetyConsultant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -21,11 +22,13 @@ class SaftyConsultantController extends Controller
     {
 //        $safety_consultant = SafetyConsultant::where('role_id', '=', 4)->paginate(10);
         $safety_consultant =DB::table('users')
-            ->leftJoin('profiles', 'users.id', '=', 'profiles.user_id')
-            ->leftJoin('roles', 'roles.id', '=', 'users.role_id')
+            ->join('profiles', 'users.id', '=', 'profiles.user_id')
+            ->join('roles', 'roles.id', '=', 'users.role_id')
             ->leftJoin('experts', 'experts.id', '=', 'profiles.expert_id')
-            ->select('users.*','profiles.phone_number','profiles.address','roles.role_name','experts.name_expert')
-            ->where('users.role_id','=',4)->paginate(10);
+            ->select('users.*', 'profiles.phone_number', 'roles.role_name', 'experts.name_expert','experts.id as expertId')
+            ->where('users.role_id', '=', 4)
+            ->where('users.status', '=', 1)
+            ->paginate(10);
         return response()->json(
             new SafetyConsultantCollection($safety_consultant)
         , 200);
@@ -76,10 +79,15 @@ class SaftyConsultantController extends Controller
     }
     public function show($id)
     {
+        $id = Crypt::decrypt($id);
         $safety_consultant = SafetyConsultant::query()
-            ->where('id', '=', $id)
-            ->where('role_id', '=', 4)
-            ->get();
+            ->join('profiles', 'users.id', '=', 'profiles.user_id')
+            ->join('roles', 'roles.id', '=', 'users.role_id')
+            ->leftJoin('experts', 'experts.id', '=', 'profiles.expert_id')
+            ->select('users.*', 'profiles.phone_number', 'roles.role_name', 'experts.name_expert')
+            ->where('users.role_id', '=', 4)
+            ->where('users.id', '=', $id)
+            ->paginate(10);
         if ($safety_consultant->count() == 0) {
             return response()->json([
                 'message' => 'رکوردی مورد نظر یافت نشد'
@@ -94,6 +102,7 @@ class SaftyConsultantController extends Controller
     }
     public function update(Request $request, $id)
     {
+        $id = Crypt::decrypt($id);
         $safety_consultant = SafetyConsultant::query()->where('id', '=', $id)
             ->where('role_id', '=', 4)
             ->get();
@@ -167,6 +176,7 @@ class SaftyConsultantController extends Controller
     }
     public function destroy($id)
     {
+        $id = Crypt::decrypt($id);
         $safety_consultant = SafetyConsultant::query()
             ->where('id', '=', $id)
             ->where('role_id', '=', 4)

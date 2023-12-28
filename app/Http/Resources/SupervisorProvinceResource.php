@@ -25,7 +25,6 @@ class SupervisorProvinceResource extends JsonResource
             'province'=>$this->province_name,
             'expertId'=>$this->expertId,
             'provinceId'=>$this->provinceId,
-
         ];
     }
 }
