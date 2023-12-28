@@ -88,6 +88,7 @@ class SafetyContractorController extends Controller
             ->select('users.*', 'profiles.phone_number', 'roles.role_name', 'experts.name_expert')
             ->where('users.role_id', '=', 5)
             ->where('users.id', '=', $id)
+            ->orderBy('id','desc')
             ->paginate(10);
         if ($safety_contractor->count() == 0) {
             return response()->json([

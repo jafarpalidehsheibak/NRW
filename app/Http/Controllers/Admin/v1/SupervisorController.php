@@ -30,6 +30,7 @@ class SupervisorController extends Controller
             ->select('users.*', 'profiles.phone_number', 'roles.role_name', 'experts.name_expert','experts.id as expertId')
             ->where('users.role_id', '=', 3)
             ->where('users.status', '=', 1)
+            ->orderBy('id','desc')
             ->paginate(10);
         return response()->json(
             new SupervisorCollection($supervisors)

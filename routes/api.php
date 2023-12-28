@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\NewsController;
 use App\Http\Controllers\Admin\v1\SafetyContractorController;
 use App\Http\Controllers\Admin\v1\SaftyConsultantController;
+use App\Http\Controllers\Admin\v1\StepController;
 use App\Http\Controllers\Admin\v1\SupervisorController;
 use App\Http\Controllers\Admin\v1\SupervisorProvinceController;
 use Illuminate\Http\Request;
@@ -60,5 +61,6 @@ Route::group(['prefix'=>'v1'],function (){
     Route::put('/safety_contractor/{id}',[SafetyContractorController::class,'update']);
     Route::delete('/safety_contractor/{id}',[SafetyContractorController::class,'destroy']);
 
-
+    Route::get('/step',[StepController::class,'index']);
+    Route::put('/step/{id}',[StepController::class,'update']);
 });
