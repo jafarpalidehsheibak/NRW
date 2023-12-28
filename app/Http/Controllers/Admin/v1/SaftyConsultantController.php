@@ -25,7 +25,7 @@ class SaftyConsultantController extends Controller
             ->join('profiles', 'users.id', '=', 'profiles.user_id')
             ->join('roles', 'roles.id', '=', 'users.role_id')
             ->leftJoin('experts', 'experts.id', '=', 'profiles.expert_id')
-            ->select('users.*', 'profiles.phone_number', 'roles.role_name', 'experts.name_expert','experts.id as expertId')
+            ->select('users.*', 'profiles.phone_number','profiles.address', 'roles.role_name', 'experts.name_expert','experts.id as expertId')
             ->where('users.role_id', '=', 4)
             ->where('users.status', '=', 1)
             ->orderBy('id','desc')
