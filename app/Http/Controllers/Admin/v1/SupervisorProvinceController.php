@@ -190,16 +190,13 @@ class SupervisorProvinceController extends Controller
             ]);
         } else {
             try {
-                DB::beginTransaction();
                 $supervisor_province->first()->update([
                     'status' => 0,
                 ]);
-                Db::commit();
                 return response()->json([
                     'data' => 'رکورد مورد نظر با موفقیت حذف شد'
                 ], 200);
             } catch (\Exception $e) {
-                DB::rollBack();
                 return response()->json([
                     'message' => 'خطا در حذف اطلاعات'
                 ]);

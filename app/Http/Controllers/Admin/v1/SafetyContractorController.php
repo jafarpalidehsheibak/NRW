@@ -191,10 +191,18 @@ class SafetyContractorController extends Controller
                 'message' => 'رکورد مورد نظر یافت نشد'
             ]);
         } else {
-            $safety_contractor->first()->delete();
-            return response()->json([
-                'data' => 'رکورد مورد نظر با موفقیت حذف شد'
-            ], 200);
+            try {
+                $safety_contractor->first()->update([
+                    'status' => 0,
+                ]);
+                return response()->json([
+                    'data' => 'رکورد مورد نظر با موفقیت حذف شد'
+                ], 200);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'message' => 'خطا در حذف اطلاعات'
+                ]);
+            }
         }
     }
 
