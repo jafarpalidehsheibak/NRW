@@ -54,6 +54,7 @@ class SafetyContractorController extends Controller
                 'password' => $password,
                 'role_id' => 5
             ]);
+
             $res2 = Profile::create([
                 'phone_number' => $request->input('phone_number'),
                 'user_id' => $res->id,

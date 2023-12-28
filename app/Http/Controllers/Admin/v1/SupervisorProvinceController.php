@@ -28,6 +28,7 @@ class SupervisorProvinceController extends Controller
             ->select('users.*', 'profiles.phone_number', 'roles.role_name', 'experts.name_expert'
                 ,'experts.id as expertId', 'provinces.province_name','provinces.id as provinceId')
             ->where('users.role_id', '=', 6)
+            ->where('users.status', '=', 1)
             ->orderBy('id','desc')
             ->paginate(10);
         return response()->json(
