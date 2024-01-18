@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\NewsController;
+use App\Http\Controllers\Admin\v1\CityeController;
+use App\Http\Controllers\Admin\v1\ExpertController;
+use App\Http\Controllers\Admin\v1\ProvinceController;
 use App\Http\Controllers\Admin\v1\SafetyContractorController;
 use App\Http\Controllers\Admin\v1\SaftyConsultantController;
 use App\Http\Controllers\Admin\v1\StepController;
@@ -63,4 +66,8 @@ Route::group(['prefix'=>'v1'],function (){
 
     Route::get('/step',[StepController::class,'index']);
     Route::put('/step/{id}',[StepController::class,'update']);
+
+    Route::get('/province',[ProvinceController::class,'index']);
+    Route::get('/city/{id}',[CityeController::class,'index']);
+    Route::get('/expert',[ExpertController::class,'index']);
 });
