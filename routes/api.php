@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\NewsController;
 use App\Http\Controllers\Admin\v1\CityeController;
+use App\Http\Controllers\Admin\v1\ContractorRequestController;
 use App\Http\Controllers\Admin\v1\ExpertController;
 use App\Http\Controllers\Admin\v1\ProvinceController;
 use App\Http\Controllers\Admin\v1\SafetyContractorController;
@@ -70,4 +71,5 @@ Route::group(['prefix'=>'v1'],function (){
     Route::get('/province',[ProvinceController::class,'index']);
     Route::get('/city/{id}',[CityeController::class,'index']);
     Route::get('/expert',[ExpertController::class,'index']);
+    Route::post('/contractor-request',[ContractorRequestController::class,'store']);
 });

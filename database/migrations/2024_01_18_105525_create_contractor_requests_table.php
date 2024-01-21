@@ -20,7 +20,7 @@ return new class extends Migration
             $table->bigInteger('city_id')->unsigned()->comment('آی دی شهر');
             $table->foreign('city_id')->references('id')->on('cities');
             $table->string('road_name')->comment('نام راه');
-            $table->bigInteger('expert_id')->nullable()->unsigned()->default(0);
+            $table->bigInteger('expert_id')->unsigned()->comment('رشته');
             $table->foreign('expert_id')->references('id')->on('experts');
             $table->unsignedInteger('workshop_location_kilometers')->comment('محل کارگاه (کیلومتراژ)');
             $table->string('workshop_begin_lat_long')->comment('لوکیشن شروع کارگاه');
@@ -32,6 +32,7 @@ return new class extends Migration
             $table->date('approximate_start_date')->comment('تاریخ تقریبی شروع');
             $table->unsignedInteger('workshop_duration')->comment('مدت زمان اجرای کارگاه(تعداد روز)');
             $table->string('description')->nullable()->comment('توضیحات');
+            $table->unsignedTinyInteger('status')->default('0')->comment('وضعیت');
             $table->timestamps();
         });
     }
