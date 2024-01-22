@@ -243,6 +243,22 @@ return [
         'company_id'=>'نام شرکت',
         'expert'=>'تخصص',
         'province'=>'استان',
+        'contractor_name'=>'نام پیمانکار',
+        'contractor_rank'=>'رتبه پیمانکار',
+        'contractor_mobile'=>'موبایل پیمانکار',
+        'province_id'=>'استان',
+        'city_id'=>'شهر',
+        'road_name'=>'نام راه',
+        'expert_id'=>'رشته',
+        'workshop_location_kilometers'=>'محل کارگاه (کیلومتراژ)',
+        'workshop_begin_lat_long'=>'مختصات مبدا',
+        'workshop_end_lat_long'=>'مختصات مقصد',
+        'workshop_name'=>'نام کارگاه',
+        'full_name_connector'=>'نام رابط',
+        'mobile_connector'=>'موبایل رابط',
+        'email_connector'=>'ایمیل رابط',
+        'approximate_start_date'=>'زمان تقریبی شروع',
+        'workshop_duration'=>'مدت زمان اجرای کارگاه',
 
 
 
