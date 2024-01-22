@@ -12,6 +12,7 @@ class ContractorRequest extends Model
     protected $fillable = [
         'contractor_name',
         'contractor_rank',
+        'user_id',
         'province_id',
         'city_id',
         'road_name',

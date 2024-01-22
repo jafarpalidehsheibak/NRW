@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('contractor_name')->comment('نام پیمانکار');
             $table->unsignedTinyInteger('contractor_rank')->comment('رتبه پیمانکار');
+            $table->bigInteger('user_id')->unsigned()->comment('آی دی پیمانکار از جدول یوزرز');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->bigInteger('province_id')->unsigned()->comment('آی دی استان');
             $table->foreign('province_id')->references('id')->on('provinces');
             $table->bigInteger('city_id')->unsigned()->comment('آی دی شهر');
