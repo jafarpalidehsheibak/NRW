@@ -99,7 +99,7 @@ class ContractorRequestController extends Controller
             if ($res) {
                 return response()->json([
                     'data' => [
-                        'message' => 'شما قبلا به عنوان پیمانکار ثبت نام کرده اید . لطفا از پنل پیمانکار اقدام به ثبت درخواست نمایید'
+                        'message' => 'رکورد مورد نظر با موفقیت ایجاد شد'
                     ],
                 ], 201);
             }
