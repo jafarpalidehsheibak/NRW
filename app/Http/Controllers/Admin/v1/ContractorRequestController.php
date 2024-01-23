@@ -29,7 +29,7 @@ class ContractorRequestController extends Controller
             'full_name_connector' => 'required|string|min:3|max:255',
             'mobile_connector' => 'required|regex:/(09)[0-9]{9}/|digits:11|numeric',
             'email_connector' => 'nullable|email',
-            'approximate_start_date' => 'required|date',
+            'approximate_start_date' => 'required|numeric|min_digits:10|max_digits:10|between:1706028890,2021635490',
             'workshop_duration' => 'required|numeric|between:1,1000',
             'description' => 'nullable|string|min:3|max:255',
         ]);

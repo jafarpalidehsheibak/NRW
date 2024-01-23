@@ -29,9 +29,9 @@ return new class extends Migration
             $table->string('workshop_end_lat_long')->comment('لوکیشن پایان کارگاه');
             $table->string('workshop_name')->comment('نام کارگاه');
             $table->string('full_name_connector')->comment('نام کامل رابط');
-            $table->string('mobile_connector')->nullable()->comment('موبایل  رابط');
+            $table->string('mobile_connector')->comment('موبایل  رابط');
             $table->string('email_connector')->nullable()->comment(' ایمیل رابط');
-            $table->date('approximate_start_date')->comment('تاریخ تقریبی شروع');
+            $table->integer('approximate_start_date')->comment('تاریخ تقریبی شروع');
             $table->unsignedInteger('workshop_duration')->comment('مدت زمان اجرای کارگاه(تعداد روز)');
             $table->string('description')->nullable()->comment('توضیحات');
             $table->unsignedTinyInteger('status')->default('0')->comment('وضعیت');
