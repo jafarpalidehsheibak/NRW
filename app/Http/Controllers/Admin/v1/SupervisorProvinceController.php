@@ -62,7 +62,8 @@ class SupervisorProvinceController extends Controller
                 'province_id' => $request->input('province'),
                 'expert_id' => $request->input('expert'),
             ]);
-            Province::update([
+            $province = Province::find($request->input('province'));
+            $province->update([
                 'status'=>1
             ]);
             DB::commit();
