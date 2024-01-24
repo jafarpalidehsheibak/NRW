@@ -11,6 +11,7 @@ class ProvinceController extends Controller
     public function index()
     {
         $provinces = DB::table('provinces')
+            ->where('status','=',1)
             ->select('provinces.id','provinces.province_name')
             ->get();
         return response()->json([

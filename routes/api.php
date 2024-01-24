@@ -72,4 +72,5 @@ Route::group(['prefix'=>'v1'],function (){
     Route::get('/city/{id}',[CityeController::class,'index']);
     Route::get('/expert',[ExpertController::class,'index']);
     Route::post('/contractor-request',[ContractorRequestController::class,'store']);
+    Route::get('/contractor-request-show',[ContractorRequestController::class,'show']);
 });

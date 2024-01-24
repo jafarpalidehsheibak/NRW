@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\v1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\SupervisorProvinceCollection;
 use App\Models\Profile;
+use App\Models\Province;
 use App\Models\SupervisorProvince;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
@@ -60,6 +61,9 @@ class SupervisorProvinceController extends Controller
                 'user_id' => $res->id,
                 'province_id' => $request->input('province'),
                 'expert_id' => $request->input('expert'),
+            ]);
+            Province::update([
+                'status'=>1
             ]);
             DB::commit();
             if ($res && $res2) {
