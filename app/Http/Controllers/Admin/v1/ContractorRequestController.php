@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Admin\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\RoadTypeCollection;
 use App\Http\Resources\UserResource;
 use App\Models\ContractorRequest;
 use App\Models\SafetyConsultant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -51,7 +53,7 @@ class ContractorRequestController extends Controller
                 'name' => $request->input('contractor_name'),
                 'email' => $request->input('contractor_mobile'),
                 'password' => $password,
-                'role_id' => 3
+                'role_id' => 3 //role 3 = پیمانکار
             ]);
             $res = ContractorRequest::create([
                 'contractor_name' => $request->input('contractor_name'),
@@ -71,7 +73,7 @@ class ContractorRequestController extends Controller
                 'approximate_start_date' => $request->input('approximate_start_date'),
                 'workshop_duration' => $request->input('workshop_duration'),
                 'description' => $request->input('description'),
-                'status' => 0,
+                'status' => 1, // status = 1 => یعنی ثبت شده و در انتظار تایید
             ]);
             DB::commit();
             if ($res && $res2) {
@@ -100,7 +102,7 @@ class ContractorRequestController extends Controller
                 'approximate_start_date' => $request->input('approximate_start_date'),
                 'workshop_duration' => $request->input('workshop_duration'),
                 'description' => $request->input('description'),
-                'status' => 0,
+                'status' => 1, // status = 1 => یعنی ثبت شده و در انتظار تایید
             ]);
             if ($res) {
                 return response()->json([
@@ -140,6 +142,39 @@ class ContractorRequestController extends Controller
         return response()->json([
             'data'=>$res
         ],200);
+    }
 
+    public function contractor_request_road()
+    {
+        $res = DB::table('road_type')->where('parent_id',0)->paginate(10);
+        return response()->json(
+            new RoadTypeCollection($res)
+        );
+    }
+    public function contractor_request_road_id($id)
+    {
+        $res = DB::table('road_type')
+            ->where('parent_id',$id)
+            ->paginate(10);
+        return response()->json(
+            new RoadTypeCollection($res)
+        );
+    }
+
+    public function contractor_request_road_importance(Request $request)
+    {
+        $this->validate($request,[
+            'id'=>'required|numeric|exists:road_type,id'
+        ]);
+        $id = $request->input('id');
+        if ($id==1 || $id==3){
+            $this->validate($request,[
+                'speed_befor'=>'required|numeric|min:1|max:200',
+                'speed_during'=>'required|numeric|min:1|max:200',
+            ]);
+        }
+        elseif ($id==2){
+            return '2';
+        }
     }
 }

@@ -73,4 +73,8 @@ Route::group(['prefix'=>'v1'],function (){
     Route::get('/expert',[ExpertController::class,'index']);
     Route::post('/contractor-request',[ContractorRequestController::class,'store']);
     Route::get('/contractor-request-show',[ContractorRequestController::class,'show']);
+    Route::get('/contractor-request-road',[ContractorRequestController::class,'contractor_request_road']);
+    Route::get('/contractor-request-road/{id}',[ContractorRequestController::class,'contractor_request_road_id']);
+    Route::post('/contractor-request-road-importance',[ContractorRequestController::class,'contractor_request_road_importance']);
+
 });
