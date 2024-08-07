@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ContractorRequestCollection;
 use App\Http\Resources\RoadTypeCollection;
 use App\Http\Resources\UserResource;
 use App\Models\ContractorRequest;
@@ -138,10 +139,10 @@ class ContractorRequestController extends Controller
                 'contractor_requests.email_connector','contractor_requests.approximate_start_date','contractor_requests.workshop_duration','contractor_requests.description',
                 'contractor_requests.status',
                 'provinces.province_name','cities.city_name','experts.name_expert')
-            ->get();
-        return response()->json([
-            'data'=>$res
-        ],200);
+            ->paginate(10);
+        return response()->json(
+            new ContractorRequestCollection($res)
+        ,200);
     }
 
     public function contractor_request_road()
@@ -153,6 +154,7 @@ class ContractorRequestController extends Controller
     }
     public function contractor_request_road_id($id)
     {
+        $id = Crypt::decrypt($id);
         $res = DB::table('road_type')
             ->where('parent_id',$id)
             ->paginate(10);
@@ -163,17 +165,28 @@ class ContractorRequestController extends Controller
 
     public function contractor_request_road_importance(Request $request)
     {
-        $this->validate($request,[
-            'id'=>'required|numeric|exists:road_type,id'
-        ]);
-        $id = $request->input('id');
-        if ($id==1 || $id==3){
+        $road_id = $request->input('road_id');
+        $road_id = Crypt::decrypt($road_id);
+
+        $contractor_request_id = $request->input('contractor_request_id');
+        $contractor_request_id = Crypt::decrypt($contractor_request_id);
+
+        $res = DB::table('contractor_requests')
+            ->where('id',$contractor_request_id)->get();
+        $workshop_location_kilometers = $res[0]->workshop_location_kilometers;
+
+        if ($road_id==1 || $road_id==3){
             $this->validate($request,[
                 'speed_befor'=>'required|numeric|min:1|max:200',
                 'speed_during'=>'required|numeric|min:1|max:200',
             ]);
+            $speed_befor = $request->input('speed_befor');
+            $speed_during = $request->input('speed_during');
+
+            $t  = ($workshop_location_kilometers / $speed_during) - ($workshop_location_kilometers / $speed_befor);
+            dd($t);
         }
-        elseif ($id==2){
+        elseif ($road_id==2){
             return '2';
         }
     }
