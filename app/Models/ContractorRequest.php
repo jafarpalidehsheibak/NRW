@@ -28,5 +28,11 @@ class ContractorRequest extends Model
         'workshop_duration',
         'description',
         'status',
+        'speed_befor',
+        'speed_during',
+        't_delay_time',
+        'volume',
+        'road_id_ref',
+        'seen_date',
     ];
 }

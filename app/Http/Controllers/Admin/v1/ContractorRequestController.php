@@ -165,29 +165,172 @@ class ContractorRequestController extends Controller
 
     public function contractor_request_road_importance(Request $request)
     {
-        $road_id = $request->input('road_id');
-        $road_id = Crypt::decrypt($road_id);
+        try {
+            $road_id = $request->input('road_id');
+            $road_id = Crypt::decrypt($road_id);
 
-        $contractor_request_id = $request->input('contractor_request_id');
-        $contractor_request_id = Crypt::decrypt($contractor_request_id);
+            $contractor_request_id = $request->input('contractor_request_id');
+            $contractor_request_id = Crypt::decrypt($contractor_request_id);
 
-        $res = DB::table('contractor_requests')
-            ->where('id',$contractor_request_id)->get();
-        $workshop_location_kilometers = $res[0]->workshop_location_kilometers;
+            $res = DB::table('contractor_requests')
+                ->where('id',$contractor_request_id)->first();
 
-        if ($road_id==1 || $road_id==3){
-            $this->validate($request,[
-                'speed_befor'=>'required|numeric|min:1|max:200',
-                'speed_during'=>'required|numeric|min:1|max:200',
-            ]);
-            $speed_befor = $request->input('speed_befor');
-            $speed_during = $request->input('speed_during');
+            $workshop_location_kilometers = $res->workshop_location_kilometers;
+            if ($road_id==1 || $road_id==3){
+                $this->validate($request,[
+                    'speed_befor'=>'required|numeric|min:1|max:200',
+                    'speed_during'=>'required|numeric|min:1|max:200',
+                ]);
+                $speed_befor = $request->input('speed_befor');
+                $speed_during = $request->input('speed_during');
 
-            $t  = ($workshop_location_kilometers / $speed_during) - ($workshop_location_kilometers / $speed_befor);
-            dd($t);
+                $t  = ($workshop_location_kilometers / $speed_during) - ($workshop_location_kilometers / $speed_befor);
+                $ContractorRequestItem = ContractorRequest::find($contractor_request_id);
+
+                if ($t > 10 ){
+                    $updated_ContractorRequest = $ContractorRequestItem->update([
+                        'speed_befor' => $speed_befor,
+                        'speed_during' => $speed_during,
+                        'road_id_ref' => $road_id,
+                        't_delay_time'=>$t
+                    ]);
+                    if ($updated_ContractorRequest) {
+                        return response()->json([
+                            'data'=>[
+                                'msg'=>'پروژه پر اهمیت است',
+                                'flag'=>2,
+                                't'=>$t,
+                                'contractor_request_id'=>Crypt::encrypt($contractor_request_id)
+                            ]
+                        ]);
+                    }
+                }
+                elseif($t < 10 )
+                {
+                    $updated_ContractorRequest = $ContractorRequestItem->update([
+                        'speed_befor' => $speed_befor,
+                        'speed_during' => $speed_during,
+                        'road_id_ref' => $road_id,
+                        't_delay_time'=>$t
+                    ]);
+                    if ($updated_ContractorRequest) {
+                        return response()->json([
+                            'data'=>[
+                                'msg'=>'پروژه کم اهمیت است',
+                                'flag'=>3,
+                                't'=>$t,
+                                'contractor_request_id'=>Crypt::encrypt($contractor_request_id)
+                            ]
+                        ]);
+                    }
+                }
+            }
+            elseif ($road_id==2){
+
+                 $this->validate($request,[
+                    'road_id2'=>'required',
+                     'speed_befor'=>'required|numeric|min:1|max:200',
+                     'speed_during'=>'required|numeric|min:1|max:200',
+                     'volume'=>'required|numeric|min:1|max:100000',
+                ]);
+                $road_id2 = $request->input('road_id2');
+                $road_id2 = Crypt::decrypt($road_id2);
+                $res = DB::table('road_type')
+                    ->where('id',$road_id2)->first();
+                $vphpl = $res->vphpl;
+                $volume = $request->input('volume');
+                $speed_befor = $request->input('speed_befor');
+                $speed_during = $request->input('speed_during');
+
+                $hajm_zarfiyat = $volume / $vphpl;
+                if($hajm_zarfiyat <= 0.8){
+                    return response()->json([
+                        'data'=>[
+                            'msg'=>'پروژه پر اهمیت است',
+                            'flag'=>2,
+                            'hajm_zarfiyat'=>$hajm_zarfiyat,
+                            'contractor_request_id'=>Crypt::encrypt($contractor_request_id)
+                        ]
+                    ]);
+                }
+                elseif($hajm_zarfiyat > 0.8){
+                    $t  = ($workshop_location_kilometers / $speed_during) - ($workshop_location_kilometers / $speed_befor);
+                    $ContractorRequestItem = ContractorRequest::find($contractor_request_id);
+
+                    if ($t > 10 ){
+                        $updated_ContractorRequest = $ContractorRequestItem->update([
+                            'speed_befor' => $speed_befor,
+                            'speed_during' => $speed_during,
+                            'road_id_ref' => $road_id,
+                            't_delay_time'=>$t
+                        ]);
+                        if ($updated_ContractorRequest) {
+                            return response()->json([
+                                'data'=>[
+                                    'msg'=>'پروژه پر اهمیت است',
+                                    'flag'=>2,
+                                    't'=>$t,
+                                    'contractor_request_id'=>Crypt::encrypt($contractor_request_id)
+                                ]
+                            ]);
+                        }
+                    }
+                    elseif($t < 10 )
+                    {
+
+                    }
+
+                }
+            }
         }
-        elseif ($road_id==2){
-            return '2';
+        catch (\Exception $exception){
+            return response()->json([
+                'msg'=>'اطلاعات ورودی نامعتبر است'
+            ]);
+        }
+    }
+
+    public function update_contractor_request_importance_status(Request $request)
+    {
+        $this->validate($request,[
+            'flag'=>'required|numeric|in:2,3'
+        ]);
+        try {
+            $contractor_request_id = $request->input('contractor_request_id');
+            $contractor_request_id = Crypt::decrypt($contractor_request_id);
+
+            $ContractorRequestItem = ContractorRequest::find($contractor_request_id);
+
+            $flag = $request->input('flag');
+            if ($flag==2)
+            {
+                $ContractorRequestItem->update([
+                    'status'=>2
+                ]);
+                return response()->json([
+                    'data'=>[
+                        'msg'=>'اهمیت پروژه به پر اهمیت تغییر کرد',
+                    ]
+                ]);
+            }
+            if ($flag==3)
+            {
+                $ContractorRequestItem->update([
+                    'status'=>3
+                ]);
+                return response()->json([
+                    'data'=>[
+                        'msg'=>'اهمیت پروژه به کم اهمیت تغییر کرد',
+                    ]
+                ]);
+            }
+        }
+        catch (\Exception $exception){
+            return response()->json([
+                'data'=>[
+                    'msg'=>'داده های ورودی نامعتبر است',
+                ]
+            ]);
         }
     }
 }
