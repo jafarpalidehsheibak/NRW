@@ -33,6 +33,8 @@ class ContractorRequest extends Model
         't_delay_time',
         'volume',
         'road_id_ref',
+        'abc',
+        'acd',
         'seen_date',
     ];
 }

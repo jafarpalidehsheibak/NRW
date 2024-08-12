@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class ContractorRequestController extends Controller
@@ -241,11 +242,10 @@ class ContractorRequestController extends Controller
                 $volume = $request->input('volume');
                 $speed_befor = $request->input('speed_befor');
                 $speed_during = $request->input('speed_during');
-
                 $hajm_zarfiyat = $volume / $vphpl;
                 if($hajm_zarfiyat >= 0.8){
                     $ContractorRequestItem = ContractorRequest::find($contractor_request_id);
-                    $updated_ContractorRequest = $ContractorRequestItem->update([
+                     $ContractorRequestItem->update([
                         'speed_befor' => $speed_befor,
                         'speed_during' => $speed_during,
                         'road_id_ref' => $road_id2,
@@ -263,7 +263,7 @@ class ContractorRequestController extends Controller
                 elseif($hajm_zarfiyat < 0.8){
                     $t  = ($workshop_location_kilometers / $speed_during) - ($workshop_location_kilometers / $speed_befor);
                     $ContractorRequestItem = ContractorRequest::find($contractor_request_id);
-                    $updated_ContractorRequest = $ContractorRequestItem->update([
+                    $ContractorRequestItem->update([
                         'speed_befor' => $speed_befor,
                         'speed_during' => $speed_during,
                         'road_id_ref' => $road_id2,
@@ -281,41 +281,53 @@ class ContractorRequestController extends Controller
                     }
                     elseif($t < 10 )
                     {
-                        $this->validate($request,[
-                            'abc'=>'required',
+                        $validator = Validator::make($request->all(),[
+                            'abc' => 'required|numeric|in:1,2',
                         ]);
+                        if($validator->fails()){
+                            return response($validator->messages(), 200);
+                        }
                         $abc = $request->input('abc');
-                        if (!$abc){
+                        $ContractorRequestItem->update([
+                            'abc' => $abc,
+                        ]);
+                        if ($abc==1){
                             return response()->json([
                                 'data'=>[
                                     'msg'=>'پروژه پر اهمیت است',
                                     'flag'=>2,
-                                    'abc'=>false,
+                                    'abc'=>1,
                                     'contractor_request_id'=>Crypt::encrypt($contractor_request_id)
                                 ]
                             ]);
                         }
-                        else{
-                            $this->validate($request,[
-                                'acd'=>'required',
+                        elseif ($abc==2){
+                            $validator = Validator::make($request->all(),[
+                                'acd' => 'required|numeric|in:1,2',
                             ]);
+                            if($validator->fails()){
+                                return response($validator->messages(), 200);
+                            }
                             $acd = $request->input('acd');
-                            if (!$acd){
+                            $ContractorRequestItem->update([
+                                'acd' => $acd,
+                            ]);
+                            if ($acd==1){
                                 return response()->json([
                                     'data'=>[
                                         'msg'=>'پروژه پر اهمیت است',
                                         'flag'=>2,
-                                        'acd'=>false,
+                                        'acd'=>1,
                                         'contractor_request_id'=>Crypt::encrypt($contractor_request_id)
                                     ]
                                 ]);
                             }
-                            else{
+                            elseif ($acd==2){
                                 return response()->json([
                                     'data'=>[
                                         'msg'=>'پروژه کم اهمیت است',
                                         'flag'=>3,
-                                        'acd'=>true,
+                                        'acd'=>2,
                                         'contractor_request_id'=>Crypt::encrypt($contractor_request_id)
                                     ]
                                 ]);
