@@ -123,23 +123,26 @@ class ContractorRequestController extends Controller
 //        return response()->json([
 //            'name'=>auth('api')->user()->role_id
 //        ]);
-//        dd(auth('api')->user()->id);
+//       dd(auth('api')->user()->id);
         $province_id = DB::table('users')
             ->join('profiles','profiles.user_id','=','users.id')
             ->where('users.id','=',auth('api')->user()->id)
             ->select('profiles.province_id')
             ->get();
+//        dd($province_id);
 //        dd($province_id[0]->province_id);
         $res = DB::table('contractor_requests')
             ->join('provinces','contractor_requests.province_id','=','provinces.id')
             ->join('cities','contractor_requests.city_id','=','cities.id')
             ->join('experts','contractor_requests.expert_id','=','experts.id')
+            ->join('status_request','contractor_requests.status','=','status_request.id')
             ->where('provinces.id','=',$province_id[0]->province_id)
             ->select('contractor_requests.id','contractor_requests.contractor_name','contractor_requests.contractor_rank',
                 'contractor_requests.user_id','contractor_requests.road_name','contractor_requests.workshop_location_kilometers','contractor_requests.workshop_begin_lat_long',
                 'contractor_requests.workshop_end_lat_long','contractor_requests.workshop_name','contractor_requests.full_name_connector','contractor_requests.mobile_connector',
                 'contractor_requests.email_connector','contractor_requests.approximate_start_date','contractor_requests.workshop_duration','contractor_requests.description',
                 'contractor_requests.status',
+                'status_request.status_name',
                 'provinces.province_name','cities.city_name','experts.name_expert')
             ->paginate(10);
         return response()->json(

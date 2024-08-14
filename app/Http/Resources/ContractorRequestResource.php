@@ -31,8 +31,9 @@ class ContractorRequestResource extends JsonResource
             "approximate_start_date"=> $this->approximate_start_date,
             "workshop_duration"=> $this->workshop_duration,
             "description"=> $this->description,
-            "status"=> $this->description,
-            "province_name"=> $this->description,
+            "status"=> $this->status,
+            "status_name"=> $this->status_name,
+            "province_name"=> $this->province_name,
             "city_name"=> $this->city_name,
             "name_expert"=> $this->name_expert
         ];
