@@ -17,5 +17,6 @@ class CityeController extends Controller
         return response()->json([
             'data'=>$cities
         ],200);
+        //comment
     }
 }
