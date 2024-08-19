@@ -136,6 +136,7 @@ class ContractorRequestController extends Controller
             ->join('cities','contractor_requests.city_id','=','cities.id')
             ->join('experts','contractor_requests.expert_id','=','experts.id')
             ->join('status_request','contractor_requests.status','=','status_request.id')
+            ->join('users','users.id','=','contractor_requests.user_id')
             ->where('provinces.id','=',$province_id[0]->province_id)
             ->select('contractor_requests.id','contractor_requests.contractor_name','contractor_requests.contractor_rank',
                 'contractor_requests.user_id','contractor_requests.road_name','contractor_requests.workshop_location_kilometers','contractor_requests.workshop_begin_lat_long',
@@ -143,6 +144,7 @@ class ContractorRequestController extends Controller
                 'contractor_requests.email_connector','contractor_requests.approximate_start_date','contractor_requests.workshop_duration','contractor_requests.description',
                 'contractor_requests.status',
                 'status_request.status_name',
+                'users.email',
                 'provinces.province_name','cities.city_name','experts.name_expert')
             ->paginate(10);
         return response()->json(

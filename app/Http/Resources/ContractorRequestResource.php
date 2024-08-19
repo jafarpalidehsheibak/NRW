@@ -20,6 +20,7 @@ class ContractorRequestResource extends JsonResource
             "contractor_name"=> $this->contractor_name,
             "contractor_rank"=> $this->contractor_rank,
             "user_id"=> $this->user_id,
+            "contractor_mobile"=> $this->email,
             "road_name"=> $this->road_name,
             "workshop_location_kilometers"=> $this->workshop_location_kilometers,
             "workshop_begin_lat_long"=> $this->workshop_begin_lat_long,
