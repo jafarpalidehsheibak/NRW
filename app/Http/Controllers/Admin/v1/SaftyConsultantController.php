@@ -80,7 +80,6 @@ class SaftyConsultantController extends Controller
     }
     public function show($id)
     {
-        $id = Crypt::decrypt($id);
         $safety_consultant = SafetyConsultant::query()
             ->join('profiles', 'users.id', '=', 'profiles.user_id')
             ->join('roles', 'roles.id', '=', 'users.role_id')
@@ -103,7 +102,6 @@ class SaftyConsultantController extends Controller
     }
     public function update(Request $request, $id)
     {
-        $id = Crypt::decrypt($id);
         $safety_consultant = SafetyConsultant::query()->where('id', '=', $id)
             ->where('role_id', '=', 4)
             ->get();
@@ -177,7 +175,6 @@ class SaftyConsultantController extends Controller
     }
     public function destroy($id)
     {
-        $id = Crypt::decrypt($id);
         $safety_consultant = SafetyConsultant::query()
             ->where('id', '=', $id)
             ->where('role_id', '=', 4)

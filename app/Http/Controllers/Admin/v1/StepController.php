@@ -28,7 +28,6 @@ class StepController extends Controller
     }
     public function update(Request $request, $id)
     {
-        $id = Crypt::decrypt($id);
         $step =Step::query()->where('id', '=', $id)->get();
 //        return $step;
         if ($step->count() == 0 ) {

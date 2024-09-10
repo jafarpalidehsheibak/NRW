@@ -16,7 +16,7 @@ class StepResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'=>Crypt::encrypt($this->id),
+            'id'=>$this->id,
             'step_name'=>$this->step_name,
             'execution_time'=>$this->execution_time,
         ];

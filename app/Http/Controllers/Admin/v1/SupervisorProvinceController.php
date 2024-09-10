@@ -86,7 +86,6 @@ class SupervisorProvinceController extends Controller
 
     public function show($id)
     {
-        $id = Crypt::decrypt($id);
         $supervisor_province = DB::table('users')
             ->join('profiles', 'users.id', '=', 'profiles.user_id')
             ->join('roles', 'roles.id', '=', 'users.role_id')
@@ -110,7 +109,6 @@ class SupervisorProvinceController extends Controller
 
     public function update(Request $request, $id)
     {
-        $id = Crypt::decrypt($id);
         $supervisor_province = SupervisorProvince::query()->where('id', '=', $id)
             ->where('role_id', '=', 6)
             ->get();
@@ -184,7 +182,6 @@ class SupervisorProvinceController extends Controller
     }
     public function destroy($id)
     {
-        $id = Crypt::decrypt($id);
         $supervisor_province = SupervisorProvince::query()
             ->where('id', '=', $id)
             ->where('role_id', '=', 6)

@@ -16,7 +16,7 @@ class SupervisorResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'=>Crypt::encrypt($this->id),
+            'id'=>$this->id,
             'name'=>$this->name,
             'username'=>$this->email,
             'status'=>$this->status,

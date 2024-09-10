@@ -16,7 +16,7 @@ class ContractorRequestResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'=>Crypt::encrypt($this->id),
+            'id'=>$this->id,
             "contractor_name"=> $this->contractor_name,
             "contractor_rank"=> $this->contractor_rank,
             "user_id"=> $this->user_id,

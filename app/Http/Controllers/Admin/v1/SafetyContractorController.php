@@ -106,7 +106,6 @@ class SafetyContractorController extends Controller
 
     public function update(Request $request, $id)
     {
-        $id = Crypt::decrypt($id);
         $safety_contractor = SafetyContractor::query()->where('id', '=', $id)
             ->where('role_id', '=', 5)
             ->get();
@@ -180,7 +179,6 @@ class SafetyContractorController extends Controller
 
     public function destroy($id)
     {
-        $id = Crypt::decrypt($id);
         $safety_contractor = SafetyContractor::query()
             ->where('id', '=', $id)
             ->where('role_id', '=', 5)
