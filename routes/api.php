@@ -79,8 +79,6 @@ Route::group(['prefix'=>'v1'],function (){
     Route::post('/contractor-request-road-importance',[ContractorRequestController::class,'contractor_request_road_importance']);
     Route::post('/update_contractor_request_importance_status',[ContractorRequestController::class,'update_contractor_request_importance_status']);
     Route::post('/testjson',[ContractorRequestController::class,'testjsonvalidate']);
-    Route::post('/checklist_provincial_supervisor_befor_tmp',[ContractorRequestController::class,'checklist_provincial_supervisor_befor_tmp']);
-    Route::post('/checklist_termination_enforcement_collection',[ContractorRequestController::class,'checklist_termination_enforcement_collection']);
-    Route::post('/checklist_request_start_operation',[ContractorRequestController::class,'checklist_request_start_operation']);
+    Route::post('/checklist_all_request',[ContractorRequestController::class,'checklist_all_request']);
 
 });
