@@ -455,12 +455,14 @@ class ContractorRequestController extends Controller
 //            "safety_measures_intersecting_traffic_vicinity.true_false" => 'required|in:13,14',
 //            "safety_measures_intersecting_traffic_vicinity.description" => 'nullable|string|min:3|max:1024',
             //================================چک لیست خاتمه عملیات اجرایی و جمع آوری==========================================
+
 //            "termination_date" => ['required', 'regex:/^[1-4]\d{3}\/((0[1-6]\/((3[0-1])|([1-2][0-9])|(0[1-9])))|((1[0-2]|(0[7-9]))\/(30|([1-2][0-9])|(0[1-9]))))$/'],
 //            "end_time_hours" => ['required', 'regex:/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/'],
 //            "end_time_day" => "required|numeric|between:1,365",
 //            "traffic_situation" => "required|string|min:3|max:1024",
 //            "weather_conditions" => "required|string|min:3|max:1024",
 //            "time_complete_cleaning" => ['required', 'regex:/^[1-4]\d{3}\/((0[1-6]\/((3[0-1])|([1-2][0-9])|(0[1-9])))|((1[0-2]|(0[7-9]))\/(30|([1-2][0-9])|(0[1-9]))))$/'],
+//
             ///========================چک لیست درخواست شروع عملیات====================================================
 //            "start_date"=> ['required', 'regex:/^[1-4]\d{3}\/((0[1-6]\/((3[0-1])|([1-2][0-9])|(0[1-9])))|((1[0-2]|(0[7-9]))\/(30|([1-2][0-9])|(0[1-9]))))$/'],
 //            "start_time_hours"=> ['required', 'regex:/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/'],
@@ -597,7 +599,7 @@ class ContractorRequestController extends Controller
         }
     }
 
-    public function contract_checklist(Request  $request)
+    public function checklist_provincial_supervisor_befor_tmp(Request  $request)
     {
         $contractor_request_id = $request->input('contractor_request_id');
         $checklist_id = $request->input('checklist_id');
@@ -690,5 +692,108 @@ class ContractorRequestController extends Controller
             return response($validator->messages(), 200);
         }
 //        dd($json_de);
+    }
+    public function checklist_termination_enforcement_collection(Request  $request)
+    {
+        $contractor_request_id = $request->input('contractor_request_id');
+        $checklist_id = $request->input('checklist_id');
+        $user_id = $request->input('user_id');
+        $user_id = Crypt::decrypt($user_id);
+        $js = $request->all();
+        $json_test=json_decode($js['checklist_item_detail_id'],true);
+        $arr = array(
+            'contractor_request_id'=>$contractor_request_id,
+            'checklist_id'=>$checklist_id,
+            'user_id'=>$user_id,
+            'checklist_item_detail_id'=>$json_test
+        );
+        $json_de = json_encode($arr, true);
+
+        $rules = [
+            "contractor_request_id"=>"required|numeric|exists:contractor_requests,id",
+            "checklist_id"=>"required|numeric|exists:checklist,id",
+            "user_id"=>"required|numeric|exists:users,id",
+            "checklist_item_detail_id.termination_date" => ['required', 'regex:/^[1-4]\d{3}\/((0[1-6]\/((3[0-1])|([1-2][0-9])|(0[1-9])))|((1[0-2]|(0[7-9]))\/(30|([1-2][0-9])|(0[1-9]))))$/'],
+            "checklist_item_detail_id.end_time_hours" => ['required', 'regex:/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/'],
+            "checklist_item_detail_id.end_time_day" => "required|numeric|between:1,365",
+            "checklist_item_detail_id.traffic_situation" => "required|string|min:3|max:1024",
+            "checklist_item_detail_id.weather_conditions" => "required|string|min:3|max:1024",
+            "checklist_item_detail_id.time_complete_cleaning" => ['required', 'regex:/^[1-4]\d{3}\/((0[1-6]\/((3[0-1])|([1-2][0-9])|(0[1-9])))|((1[0-2]|(0[7-9]))\/(30|([1-2][0-9])|(0[1-9]))))$/'],
+
+        ];
+        $json_de = json_decode($json_de, true);
+
+        $validator = Validator::make(
+            $json_de, $rules
+        );
+        $json_test = json_encode($json_test,true);
+        if ($validator->passes()) {
+            $res = ContractorRequestsCycle::create([
+                'contractor_request_id' => $contractor_request_id,
+                'user_id' => $user_id,
+                'checklist_id' => $checklist_id,
+                'checklist_item_detail_id' =>$json_test
+            ]);
+            if ($res) {
+                return response()->json([
+                    'data' => [
+                        'message' => 'رکورد مورد نظر با موفقیت ایجاد شد'
+                    ],
+                ], 201);
+            }
+        } else if ($validator->fails()) {
+            return response($validator->messages(), 200);
+        }
+    }
+    public function checklist_request_start_operation(Request  $request)
+    {
+        $contractor_request_id = $request->input('contractor_request_id');
+        $checklist_id = $request->input('checklist_id');
+        $user_id = $request->input('user_id');
+        $user_id = Crypt::decrypt($user_id);
+        $js = $request->all();
+        $json_test=json_decode($js['checklist_item_detail_id'],true);
+        $arr = array(
+            'contractor_request_id'=>$contractor_request_id,
+            'checklist_id'=>$checklist_id,
+            'user_id'=>$user_id,
+            'checklist_item_detail_id'=>$json_test
+        );
+        $json_de = json_encode($arr, true);
+
+        $rules = [
+            "contractor_request_id"=>"required|numeric|exists:contractor_requests,id",
+            "checklist_id"=>"required|numeric|exists:checklist,id",
+            "user_id"=>"required|numeric|exists:users,id",
+            "checklist_item_detail_id.start_date"=> ['required', 'regex:/^[1-4]\d{3}\/((0[1-6]\/((3[0-1])|([1-2][0-9])|(0[1-9])))|((1[0-2]|(0[7-9]))\/(30|([1-2][0-9])|(0[1-9]))))$/'],
+            "checklist_item_detail_id.start_time_hours"=> ['required', 'regex:/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/'],
+            "checklist_item_detail_id.start_time_day"=> "required|numeric|between:1,365",
+            "checklist_item_detail_id.traffic_situation"=> "required|string|min:3|max:1024",
+            "checklist_item_detail_id.weather_conditions"=> "required|string|min:3|max:1024",
+
+        ];
+        $json_de = json_decode($json_de, true);
+
+        $validator = Validator::make(
+            $json_de, $rules
+        );
+        $json_test = json_encode($json_test,true);
+        if ($validator->passes()) {
+            $res = ContractorRequestsCycle::create([
+                'contractor_request_id' => $contractor_request_id,
+                'user_id' => $user_id,
+                'checklist_id' => $checklist_id,
+                'checklist_item_detail_id' =>$json_test
+            ]);
+            if ($res) {
+                return response()->json([
+                    'data' => [
+                        'message' => 'رکورد مورد نظر با موفقیت ایجاد شد'
+                    ],
+                ], 201);
+            }
+        } else if ($validator->fails()) {
+            return response($validator->messages(), 200);
+        }
     }
 }
