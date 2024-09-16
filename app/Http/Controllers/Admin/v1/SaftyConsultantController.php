@@ -52,7 +52,7 @@ class SaftyConsultantController extends Controller
                 'name' => $request->input('name'),
                 'email' => $request->input('email'),
                 'password' => $password,
-                'role_id' => 4
+                'role_id' => 4  //======== مشاور ایمنی ===========
             ]);
             $res2 = Profile::create([
                 'phone_number' => $request->input('phone_number'),

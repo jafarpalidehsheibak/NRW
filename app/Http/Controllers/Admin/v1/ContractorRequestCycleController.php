@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\v1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ContractorRequestResource;
 use App\Http\Utility\Utility;
+use App\Models\ContractorRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
@@ -17,10 +18,10 @@ class ContractorRequestCycleController extends Controller
             'token'=>'required',
             'contractor_request_id'=>'required'
         ]);
+        try {
         $util = new Utility();
         $res1 = $util->decode_jwt_id($request->input('token'));
         $contractor_request_id = Crypt::decrypt($request->input('contractor_request_id'));
-        try {
             $res = DB::table('contractor_requests')
                 ->join('provinces', 'contractor_requests.province_id', '=', 'provinces.id')
                 ->join('cities', 'contractor_requests.city_id', '=', 'cities.id')
@@ -47,6 +48,41 @@ class ContractorRequestCycleController extends Controller
                 ]
             ]);
         }
+    }
+
+    public function update_safety_consultant(Request $request)
+    {
+        $this->validate($request,[
+            'token'=>'required',
+            'contractor_request_id'=>'required',
+            'safety_consultant_id'=>'required|exists:users,id',
+        ]);
+        try {
+            $util = new Utility();
+             $util->decode_jwt_id($request->input('token'));
+            $contractor_request_id = $request->input('contractor_request_id');
+            $ContractorRequestItem = ContractorRequest::find($contractor_request_id);
+            $updated_ContractorRequest = $ContractorRequestItem->update([
+                'safety_consultant_id'=>$request->input('safety_consultant_id'),
+                'status'=>4
+            ]);
+            if ($updated_ContractorRequest) {
+                return response()->json([
+                    'data' => [
+                        'msg' => 'مشاور ایمنی با موفقیت انتخاب شد',
+                    ]
+                ]);
+            }
+        }
+        catch (\Exception $exception) {
+            return response()->json([
+                'data' => [
+                    'msg' => 'داده های ورودی نامعتبر است',
+                ]
+            ]);
+        }
+
 
     }
+
 }

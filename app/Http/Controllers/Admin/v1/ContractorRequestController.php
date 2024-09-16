@@ -380,7 +380,7 @@ class ContractorRequestController extends Controller
                 catch (\Exception $e)
                 {
                     return response()->json([
-                        'msg' => 'خطایی هنگام ثبت رخ داد . لطفا دوباره تلاش کنید \n' . $e->getMessage()
+                        'msg' => 'خطایی هنگام ثبت رخ داد . لطفا دوباره تلاش کنید'
                     ]);
                 }
             }
@@ -771,7 +771,10 @@ class ContractorRequestController extends Controller
 //        $res = Hash::make('password');
 //        dd($res);
         $res = DB::table('contract_password')
-            ->orderBy('id', 'desc')
+            ->join('contractor_requests','contractor_requests.id','=','contract_password.contractor_request_id')
+            ->join('users','users.id','=','contractor_requests.user_id')
+            ->orderBy('contract_password.id', 'desc')
+            ->select('contract_password.*','users.email as mobile','contractor_requests.contractor_name')
             ->get();
         return response()->json($res
         , 201);

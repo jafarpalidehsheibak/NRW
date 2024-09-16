@@ -36,5 +36,6 @@ class ContractorRequest extends Model
         'abc',
         'acd',
         'seen_date',
+        'safety_consultant_id',
     ];
 }

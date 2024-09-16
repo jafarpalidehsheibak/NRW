@@ -15,7 +15,7 @@ class AuthContractorController extends Controller
     {
         $this->validate($request,[
             'contractor_mobile'=>'required|regex:/(09)[0-9]{9}/|digits:11|numeric',
-            'password'=>'required|size:8',
+            'password'=>'required|min:4|max:12',
         ]);
         $passInput = $request->input('password');
         $res = DB::table('users')
