@@ -57,5 +57,4 @@ class AuthController extends Controller
             'role' => auth('api')->user()->role_id,
         ]);
     }
-
 }
