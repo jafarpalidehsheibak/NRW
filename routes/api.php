@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\NewsController;
+use App\Http\Controllers\Admin\v1\AuthContractorController;
 use App\Http\Controllers\Admin\v1\CityeController;
 use App\Http\Controllers\Admin\v1\ContractorRequestController;
+use App\Http\Controllers\Admin\v1\ContractorRequestCycleController;
 use App\Http\Controllers\Admin\v1\ExpertController;
 use App\Http\Controllers\Admin\v1\ProvinceController;
 use App\Http\Controllers\Admin\v1\SafetyContractorController;
@@ -80,5 +82,8 @@ Route::group(['prefix'=>'v1'],function (){
     Route::post('/update_contractor_request_importance_status',[ContractorRequestController::class,'update_contractor_request_importance_status']);
     Route::post('/testjson',[ContractorRequestController::class,'testjsonvalidate']);
     Route::post('/checklist_all_request',[ContractorRequestController::class,'checklist_all_request']);
+    Route::get('/contract_password',[ContractorRequestController::class,'get_contract_password']);
+    Route::post('/login_contractor',[AuthContractorController::class,'login_contractor']);
+    Route::post('/show_contract_request',[ContractorRequestCycleController::class,'show_contract_request']);
 
 });

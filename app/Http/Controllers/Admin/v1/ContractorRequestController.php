@@ -9,6 +9,7 @@ use App\Http\Resources\RoadTypeCollection;
 use App\Http\Resources\UserResource;
 use App\Models\ContractorRequest;
 use App\Models\ContractorRequestsCycle;
+use App\Models\ContractPassword;
 use App\Models\SafetyConsultant;
 use Carbon\Carbon;
 use Firebase\JWT\JWT;
@@ -53,10 +54,10 @@ class ContractorRequestController extends Controller
             ->where('email', '=', $request->input('contractor_mobile'))
             ->where('role_id', '=', 3)
             ->get();
+        $rnd = Str::random(6);
+        $password = Hash::make($rnd);
         if (count($exist_on_user_tbl) == 0) {
             DB::beginTransaction();
-            $rnd = Str::random(16);
-            $password = Hash::make($rnd);
             $res2 = SafetyConsultant::create([
                 'name' => $request->input('contractor_name'),
                 'email' => $request->input('contractor_mobile'),
@@ -82,6 +83,8 @@ class ContractorRequestController extends Controller
                 'workshop_duration' => $request->input('workshop_duration'),
                 'description' => $request->input('description'),
                 'status' => 1, // status = 1 => یعنی ثبت شده و در انتظار تایید
+                'password' => $password,
+
             ]);
             DB::commit();
             if ($res && $res2) {
@@ -111,6 +114,7 @@ class ContractorRequestController extends Controller
                 'workshop_duration' => $request->input('workshop_duration'),
                 'description' => $request->input('description'),
                 'status' => 1, // status = 1 => یعنی ثبت شده و در انتظار تایید
+                'password' => $password,
             ]);
             if ($res) {
                 return response()->json([
@@ -143,6 +147,7 @@ class ContractorRequestController extends Controller
             ->join('status_request', 'contractor_requests.status', '=', 'status_request.id')
             ->join('users', 'users.id', '=', 'contractor_requests.user_id')
             ->where('provinces.id', '=', $province_id[0]->province_id)
+            ->where('status_request.id', '=', 1)
             ->select('contractor_requests.id', 'contractor_requests.contractor_name', 'contractor_requests.contractor_rank',
                 'contractor_requests.user_id', 'contractor_requests.road_name', 'contractor_requests.workshop_location_kilometers', 'contractor_requests.workshop_begin_lat_long',
                 'contractor_requests.workshop_end_lat_long', 'contractor_requests.workshop_name', 'contractor_requests.full_name_connector', 'contractor_requests.mobile_connector',
@@ -351,17 +356,33 @@ class ContractorRequestController extends Controller
         try {
             $contractor_request_id = $request->input('contractor_request_id');
             $ContractorRequestItem = ContractorRequest::find($contractor_request_id);
-
             $flag = $request->input('flag');
             if ($flag == 2) {
-                $ContractorRequestItem->update([
-                    'status' => 2
-                ]);
-                return response()->json([
-                    'data' => [
-                        'msg' => 'اهمیت پروژه به پر اهمیت تغییر کرد',
-                    ]
-                ]);
+                try {
+                    $rnd = Str::random(8);
+                    $password = Hash::make($rnd);
+                  $res1=   $ContractorRequestItem->update([
+                      'status' => 2,
+                      'password' =>$password,
+                    ]);
+                  $res2 = ContractPassword::create([
+                      'contractor_request_id'=>$ContractorRequestItem->id,
+                      'password'=>$rnd,
+                  ]);
+                    if($res1 && $res2){
+                        return response()->json([
+                            'data' => [
+                                'msg' => 'اهمیت پروژه به پر اهمیت تغییر کرد',
+                            ]
+                        ]);
+                    }
+                }
+                catch (\Exception $e)
+                {
+                    return response()->json([
+                        'msg' => 'خطایی هنگام ثبت رخ داد . لطفا دوباره تلاش کنید \n' . $e->getMessage()
+                    ]);
+                }
             }
             if ($flag == 3) {
                 $ContractorRequestItem->update([
@@ -384,10 +405,8 @@ class ContractorRequestController extends Controller
 
     public function contract_show_one($id)
     {
-//        dd($id);
         try {
             $contractor_request_id = $id;
-//            dd($contractor_request_id);
             $res = DB::table('contractor_requests')
                 ->join('provinces', 'contractor_requests.province_id', '=', 'provinces.id')
                 ->join('cities', 'contractor_requests.city_id', '=', 'cities.id')
@@ -414,8 +433,6 @@ class ContractorRequestController extends Controller
                 ]
             ]);
         }
-
-
     }
 
     public function testjsonvalidate(Request $request)
@@ -571,33 +588,7 @@ class ContractorRequestController extends Controller
 
     }
 
-    public function create_jwt($id)
-    {
-        $key = env('KEY_JWT_DRIVER');
-        $timestamp = Carbon::now()->timestamp;
-        $exp = intval($timestamp) + 18000;
-        $payload = array(
-            "iss" => env('SITE_NAME'),
-            "iat" => $timestamp,
-            "exp" => $exp,
-            'data' => [
-                'id' => $id
-            ]
-        );
-        $jwt = JWT::encode($payload, $key, 'HS256');
-        return $jwt;
-    }
 
-    public function decode_jwt_id($jwt)
-    {
-        try {
-            $key = env('KEY_JWT_DRIVER');
-            $jwt_de = JWT::decode($jwt, new Key($key, 'HS256'));
-            return $jwt_de->data->iddriver;
-        } catch (\Exception $exception) {
-            return 'Expired_token';
-        }
-    }
 
     public function checklist_all_request(Request $request)
     {
@@ -644,7 +635,7 @@ class ContractorRequestController extends Controller
                 ], 201);
             }
         } else if ($validator->fails()) {
-            return response($validator->messages(), 200);
+            return response($validator->messages(), 422);
         }
     }
 
@@ -773,5 +764,16 @@ class ContractorRequestController extends Controller
             return false;
         }
         return $rules;
+    }
+
+    public function get_contract_password()
+    {
+//        $res = Hash::make('password');
+//        dd($res);
+        $res = DB::table('contract_password')
+            ->orderBy('id', 'desc')
+            ->get();
+        return response()->json($res
+        , 201);
     }
 }
