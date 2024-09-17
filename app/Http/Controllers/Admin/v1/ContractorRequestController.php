@@ -511,37 +511,172 @@ class ContractorRequestController extends Controller
 //                ['nullable', 'required_if:details_notification_messages.0.contact_numbers_administrators_trustees_question.0.yes_no,==,1','regex:/(09)[0-9]{9}/'],
 //            "details_notification_messages.0.contact_number_emergency_services.yes_no" => "required|in:1,2",
             //===============================================چک لیست طرح عملیات حمل و نقل TOP ================================
-            "provision_parking_arrangements.provided_notprovided" => "required|in:7,8",
-            "provision_public_shared_vehicles.provided_notprovided" => "required|in:7,8",
-            "provision_special_lanes_passenger.provided_notprovided" => "required|in:7,8",
-            "arrangements_convergence_lines.done_notdone" => "required|in:5,6",
-            "measures_reduce_traffic_congestion.done_notdone" => "required|in:5,6",
-            "using_intelligent_systems.yes_no" => "required|in:7,8",
-            "creating_overtaking_lanes_heavy_vehicles.created_notcreated" => "required|in:15,16",
-            "creation_special_lanes_heavy_vehicles.created_notcreated" => "required|in:15,16",
-            "coordination_adjacent_operational_areas.coordinate_notcoordinate" => "required|in:17,18,19",
-            "stop_limits.provided_notprovided" => "required|in:7,8",
-            "control_railway_crossings.provided_notprovided" => "required|in:7,8",
-            "ramp_control.provided_notprovided" => "required|in:7,8",
-            "reducing_permitted_speed_using_signs.used_notused" => "required|in:11,12",
-            "modification_intersections_passages.done_notdone" => "required|in:5,6",
-            "restriction_heavy_vehicles_trucks.done_notdone" => "required|in:5,6",
-            "circulation_restrictions.provided_notprovided" => "required|in:7,8",
-            "personnel_safety_training.used_notused" => "required|in:11,12",
-            "coordination_response_emergency_services.provided_notprovided" => "required|in:7,8",
-            "surveillance_cctv_cameras.used_notused" => "required|in:11,12",
-            "patrol.used_notused" => "required|in:11,12",
-            "law_enforcement_police.used_notused" => "required|in:11,12",
-            "access_rescue_equipment_emergency.used_notused" => "required|in:11,12",
-            "presence_someone_emergency_services.used_notused" => "required|in:11,12",
-            "emergency_vehicle_executive_operation.provided_notprovided" => "required|in:7,8",
-            "ensuring_safety_pedestrians_users.provided_notprovided" => "required|in:7,8",
-            "safe_accesses_workshop.provided_notprovided" => "required|in:7,8",
-            "incident_management_program_workshop.provided_notprovided" => "required|in:7,8",
-            "detour_options.exist_notexist" => "required|in:19,20",
-            "necessary_arrangements_maintaining_detour_route.provided_notprovided" => "required|in:7,8",
-            "ttcp_configuration_considerations_minimize_traffic.provided_notprovided" => "required|in:7,8",
-            "preparedness_deal_unplanned_events.provided_notprovided" => "required|in:7,8",
+//            "provision_parking_arrangements.provided_notprovided" => "required|in:7,8",
+//            "provision_public_shared_vehicles.provided_notprovided" => "required|in:7,8",
+//            "provision_special_lanes_passenger.provided_notprovided" => "required|in:7,8",
+//            "arrangements_convergence_lines.done_notdone" => "required|in:5,6",
+//            "measures_reduce_traffic_congestion.done_notdone" => "required|in:5,6",
+//            "using_intelligent_systems.yes_no" => "required|in:7,8",
+//            "creating_overtaking_lanes_heavy_vehicles.created_notcreated" => "required|in:15,16",
+//            "creation_special_lanes_heavy_vehicles.created_notcreated" => "required|in:15,16",
+//            "coordination_adjacent_operational_areas.coordinate_notcoordinate" => "required|in:17,18,19",
+//            "stop_limits.provided_notprovided" => "required|in:7,8",
+//            "control_railway_crossings.provided_notprovided" => "required|in:7,8",
+//            "ramp_control.provided_notprovided" => "required|in:7,8",
+//            "reducing_permitted_speed_using_signs.used_notused" => "required|in:11,12",
+//            "modification_intersections_passages.done_notdone" => "required|in:5,6",
+//            "restriction_heavy_vehicles_trucks.done_notdone" => "required|in:5,6",
+//            "circulation_restrictions.provided_notprovided" => "required|in:7,8",
+//            "personnel_safety_training.used_notused" => "required|in:11,12",
+//            "coordination_response_emergency_services.provided_notprovided" => "required|in:7,8",
+//            "surveillance_cctv_cameras.used_notused" => "required|in:11,12",
+//            "patrol.used_notused" => "required|in:11,12",
+//            "law_enforcement_police.used_notused" => "required|in:11,12",
+//            "access_rescue_equipment_emergency.used_notused" => "required|in:11,12",
+//            "presence_someone_emergency_services.used_notused" => "required|in:11,12",
+//            "emergency_vehicle_executive_operation.provided_notprovided" => "required|in:7,8",
+//            "ensuring_safety_pedestrians_users.provided_notprovided" => "required|in:7,8",
+//            "safe_accesses_workshop.provided_notprovided" => "required|in:7,8",
+//            "incident_management_program_workshop.provided_notprovided" => "required|in:7,8",
+//            "detour_options.exist_notexist" => "required|in:19,20",
+//            "necessary_arrangements_maintaining_detour_route.provided_notprovided" => "required|in:7,8",
+//            "ttcp_configuration_considerations_minimize_traffic.provided_notprovided" => "required|in:7,8",
+//            "preparedness_deal_unplanned_events.provided_notprovided" => "required|in:7,8",
+            'consultant_name' => 'required|string|min:3|max:255',
+            'type_road' => 'required|numeric|exists:road_type|in:1,2,3',
+            'number_of_lines' => 'required|numeric|in:1,2,3,4,5,6,7',
+            'width_crossing_line' => 'required|numeric|min:1|max:1000',
+            'road_classification' => 'required|in:25,26,27',
+            'country_division_road' => 'required|in:28,29,30',
+            'road_speed_limit' => 'required|numeric|min:1|max:200',
+            'type_area_terms_road_type.id_res' => 'required|numeric',
+            'type_area_terms_road_type.id_value' => 'required|string',
+            'details_of_plan.*.length_activity_area_M' => 'required|numeric',
+            'details_of_plan.*.length_transition_zone_T' => 'required|numeric',
+            'details_of_plan.*.length_preconscious_area_A' => 'required|numeric',
+            'details_of_plan.*.length_free_range_entry_L' => 'required|numeric',
+            'details_of_plan.*.length_free_range_exit_G' => 'required|numeric',
+            'details_of_plan.*.free_range_width_S' => 'required|numeric',
+            'details_of_plan.*.length_termination_area_E' => 'required|numeric',
+            'details_of_plan.*.distance_panel_1' => 'nullable|numeric',
+            'details_of_plan.*.distance_panel_2' => 'nullable|numeric',
+            'details_of_plan.*.distance_panel_3' => 'nullable|numeric',
+            'details_of_plan.*.distance_panel_4' => 'nullable|numeric',
+            'details_of_plan.*.distance_panel_5' => 'nullable|numeric',
+            'details_of_plan.*.distance_panel_6' => 'nullable|numeric',
+            'details_of_plan.*.distance_panel_7' => 'nullable|numeric',
+            'details_of_plan.*.distance_panel_8' => 'nullable|numeric',
+            'details_of_plan.*.distance_panel_9' => 'nullable|numeric',
+            'details_of_plan.*.distance_panel_10' => 'nullable|numeric',
+            'details_of_plan.*.distance_panel_11' => 'nullable|numeric',
+            'details_of_plan.*.distance_panel_12' => 'nullable|numeric',
+            'details_of_plan.*.distance_panel_13' => 'nullable|numeric',
+            'details_of_plan.*.distance_panel_14' => 'nullable|numeric',
+            'details_of_plan.*.distance_panel_15' => 'nullable|numeric',
+            'details_of_plan.*.distance_panel_16' => 'nullable|numeric',
+            'details_of_plan.*.distance_panel_17' => 'nullable|numeric',
+            'details_of_plan.*.distance_panel_18' => 'nullable|numeric',
+            'details_of_plan.*.distance_panel_19' => 'nullable|numeric',
+            'details_of_plan.*.distance_panel_20' => 'nullable|numeric',
+            'details_of_plan.*.distance_panel_21' => 'nullable|numeric',
+            'details_of_plan.*.distance_panel_22' => 'nullable|numeric',
+            'details_of_plan.*.distance_panel_23' => 'nullable|numeric',
+            'details_of_plan.*.distance_panel_24' => 'nullable|numeric',
+            'details_of_plan.*.distance_panel_25' => 'nullable|numeric',
+            'details_of_plan.*.distance_panel_26' => 'nullable|numeric',
+            'details_of_plan.*.distance_panel_27' => 'nullable|numeric',
+            'details_of_plan.*.distance_panel_28' => 'nullable|numeric',
+            'details_of_plan.*.distance_panel_29' => 'nullable|numeric',
+            'details_of_plan.*.distance_panel_30' => 'nullable|numeric',
+            'traffic_control_method' => 'required|string',
+            'type_traffic_protection.new_jersey' => 'required|in:13,14',
+            'type_traffic_protection.cone.*.cone_bool' => 'required|in:13,14',
+            'type_traffic_protection.cone.*.distance_cones_transition_zone' => 'nullable|required_if:type_traffic_protection.cone.*.cone_bool,==,13',
+            'type_traffic_protection.cone.*.distance_cones_straight_area' => 'nullable|required_if:type_traffic_protection.cone.*.cone_bool,==,13',
+            'type_traffic_protection.cone.*.distance_cones_along_inlet' => 'nullable|required_if:type_traffic_protection.cone.*.cone_bool,==,13',
+            'type_traffic_protection.cone.*.distance_cones_along_outlet' => 'nullable|required_if:type_traffic_protection.cone.*.cone_bool,==,13',
+            'type_traffic_protection.barrel.*.barrel_bool' => 'required|in:13,14',
+            'type_traffic_protection.barrel.*.distance_barrels_transition_zone' => 'nullable|required_if:type_traffic_protection.barrel.*.barrel_bool,==,13',
+            'type_traffic_protection.barrel.*.distance_barrels_straight_area' => 'nullable|required_if:type_traffic_protection.barrel.*.barrel_bool,==,13',
+            'type_traffic_protection.barrel.*.distance_barrels_along_inlet' => 'nullable|required_if:type_traffic_protection.barrel.*.barrel_bool,==,13',
+            'type_traffic_protection.barrel.*.distance_barrels_along_outlet' => 'nullable|required_if:type_traffic_protection.barrel.*.barrel_bool,==,13',
+            'number_blocked_lines' => 'required|integer|min:1|max:1000',
+            'night_operation.have_nothave' => 'required|in:9,10',
+            'obstruction_of_ramp.have_nothave' => 'required|in:9,10',
+            'intersection_obstruction.have_nothave' => 'required|in:9,10',
+            'blockage_time_during_week' => 'required|in:31,32,33',
+            'signs_equipment_operation_area.210_210_400.have_nothave' => 'required|in:9,10',
+            'signs_equipment_operation_area.210_210_400.210_210_400_value' => 'nullable|numeric|required_if:signs_equipment_operation_area.210_210_400.have_nothave,9',
+            'signs_equipment_operation_area.210_210_600.have_nothave' => 'required|in:9,10',
+            'signs_equipment_operation_area.210_210_600.210_210_600_value' => 'nullable|numeric|required_if:signs_equipment_operation_area.210_210_600.have_nothave,9',
+            'signs_equipment_operation_area.210_210_800.have_nothave' => 'required|in:9,10',
+            'signs_equipment_operation_area.210_210_800.210_210_800_value' => 'nullable|numeric|required_if:signs_equipment_operation_area.210_210_800.have_nothave,9',
+            'signs_equipment_operation_area.180_180_drive_right.180_180_drive_right_value' => 'nullable|numeric',
+            'signs_equipment_operation_area.180_180_drive_left.have_nothave' => 'required|in:9,10',
+            'signs_equipment_operation_area.180_180_drive_left.180_180_drive_left_value' => 'nullable|numeric|required_if:signs_equipment_operation_area.180_180_drive_left.have_nothave,9',
+            'signs_equipment_operation_area.90_title.have_nothave' => 'required|in:9,10',
+            'signs_equipment_operation_area.90_title.90_value' => 'nullable|numeric|required_if:signs_equipment_operation_area.90_title.have_nothave,9',
+            'signs_equipment_operation_area.100_100_30.have_nothave' => 'required|in:9,10',
+            'signs_equipment_operation_area.100_100_30.100_100_30_value' => 'nullable|numeric|required_if:signs_equipment_operation_area.100_100_30.have_nothave,9',
+            'signs_equipment_operation_area.100_100_50.have_nothave' => 'required|in:9,10',
+            'signs_equipment_operation_area.100_100_50.100_100_50_value' => 'nullable|numeric|required_if:signs_equipment_operation_area.100_100_50.have_nothave,9',
+            'signs_equipment_operation_area.120_120_80.have_nothave' => 'required|in:9,10',
+            'signs_equipment_operation_area.120_120_80.120_120_80_value' => 'nullable|numeric|required_if:signs_equipment_operation_area.120_120_80.have_nothave,9',
+            'signs_equipment_operation_area.100_100_1.have_nothave' => 'required|in:9,10',
+            'signs_equipment_operation_area.100_100_1.100_100_1_value' => 'nullable|numeric|required_if:signs_equipment_operation_area.100_100_1.have_nothave,9',
+            'signs_equipment_operation_area.100_100_2.have_nothave' => 'required|in:9,10',
+            'signs_equipment_operation_area.100_100_2.100_100_2_value' => 'nullable|numeric|required_if:signs_equipment_operation_area.100_100_2.have_nothave,9',
+            'signs_equipment_operation_area.100_310_end.have_nothave' => 'required|in:9,10',
+            'signs_equipment_operation_area.100_310_end.100_310_end_value' => 'nullable|numeric|required_if:signs_equipment_operation_area.100_310_end.have_nothave,9',
+            'signs_equipment_operation_area.hagh_taghadom.have_nothave' => 'required|in:9,10',
+            'signs_equipment_operation_area.hagh_taghadom.hagh_taghadom_value' => 'nullable|numeric|required_if:signs_equipment_operation_area.hagh_taghadom.have_nothave,9',
+            'signs_equipment_operation_area.hagh_taghadom_vasile.have_nothave' => 'required|in:9,10',
+            'signs_equipment_operation_area.hagh_taghadom_vasile.hagh_taghadom_vasile_value' => 'nullable|numeric|required_if:signs_equipment_operation_area.hagh_taghadom_vasile.have_nothave,9',
+            'signs_equipment_operation_area.50_75_1500.have_nothave' => 'required|in:9,10',
+            'signs_equipment_operation_area.50_75_1500.50_75_1500_value' => 'nullable|numeric|required_if:signs_equipment_operation_area.50_75_1500.have_nothave,9',
+            'signs_equipment_operation_area.50_75_1000.have_nothave' => 'required|in:9,10',
+            'signs_equipment_operation_area.50_75_1000.50_75_1000_value' => 'nullable|numeric|required_if:signs_equipment_operation_area.50_75_1000.have_nothave,9',
+            'signs_equipment_operation_area.50_75_500.have_nothave' => 'required|in:9,10',
+            'signs_equipment_operation_area.50_75_500.50_75_500_value' => 'nullable|numeric|required_if:signs_equipment_operation_area.50_75_500.have_nothave,9',
+            'signs_equipment_operation_area.150_kargar_mashghool.have_nothave' => 'required|in:9,10',
+            'signs_equipment_operation_area.150_kargar_mashghool.150_kargar_mashghool_value' => 'nullable|numeric|required_if:signs_equipment_operation_area.150_kargar_mashghool.have_nothave,9',
+            'signs_equipment_operation_area.50_75_road_narrow.have_nothave' => 'required|in:9,10',
+            'signs_equipment_operation_area.50_75_road_narrow.50_75_road_narrow_value' => 'nullable|numeric|required_if:signs_equipment_operation_area.50_75_road_narrow.have_nothave,9',
+            'signs_equipment_operation_area.75_danger_light.have_nothave' => 'required|in:9,10',
+            'signs_equipment_operation_area.75_danger_light.75_danger_light_value' => 'nullable|numeric|required_if:signs_equipment_operation_area.75_danger_light.have_nothave,9',
+            'signs_equipment_operation_area.traffic_light.have_nothave' => 'required|in:9,10',
+            'signs_equipment_operation_area.traffic_light.traffic_light_value' => 'nullable|numeric|required_if:signs_equipment_operation_area.traffic_light.have_nothave,9',
+            'signs_equipment_operation_area.lamp_makhrooti.have_nothave' => 'required|in:9,10',
+            'signs_equipment_operation_area.lamp_makhrooti.lamp_makhrooti_value' => 'nullable|numeric|required_if:signs_equipment_operation_area.lamp_makhrooti.have_nothave,9',
+            'signs_equipment_operation_area.borj_noor_mobile.have_nothave' => 'required|in:9,10',
+            'signs_equipment_operation_area.borj_noor_mobile.borj_noor_mobile_value' => 'nullable|numeric|required_if:signs_equipment_operation_area.borj_noor_mobile.have_nothave,9',
+            'signs_equipment_operation_area.newjersi_terrafici.have_nothave' => 'required|in:9,10',
+            'signs_equipment_operation_area.newjersi_terrafici.newjersi_terrafici_value' => 'nullable|numeric|required_if:signs_equipment_operation_area.newjersi_terrafici.have_nothave,9',
+            'signs_equipment_operation_area.boshke_zard.have_nothave' => 'required|in:9,10',
+            'signs_equipment_operation_area.boshke_zard.boshke_zard_value' => 'nullable|numeric|required_if:signs_equipment_operation_area.boshke_zard.have_nothave,9',
+            'signs_equipment_operation_area.makhrooti_terrafic.have_nothave' => 'required|in:9,10',
+            'signs_equipment_operation_area.makhrooti_terrafic.makhrooti_terrafic_value' => 'nullable|numeric|required_if:signs_equipment_operation_area.makhrooti_terrafic.have_nothave,9',
+            'signs_equipment_operation_area.adamak_terrafici.have_nothave' => 'required|in:9,10',
+            'signs_equipment_operation_area.adamak_terrafici.adamak_terrafici_value' => 'nullable|numeric|required_if:signs_equipment_operation_area.adamak_terrafici.have_nothave,9',
+            'signs_equipment_operation_area.kolah_imeni_cheraghdar.have_nothave' => 'required|in:9,10',
+            'signs_equipment_operation_area.kolah_imeni_cheraghdar.adamak_terrafici_value' => 'nullable|numeric|required_if:signs_equipment_operation_area.kolah_imeni_cheraghdar.have_nothave,9',
+            'signs_equipment_operation_area.shabname_terrafici.have_nothave' => 'required|in:9,10',
+            'signs_equipment_operation_area.shabname_terrafici.adamak_terrafici_value' => 'nullable|numeric|required_if:signs_equipment_operation_area.shabname_terrafici.have_nothave,9',
+            'signs_equipment_operation_area.kamiyoon_tajhizat_terrafici.have_nothave' => 'required|in:9,10',
+            'signs_equipment_operation_area.kamiyoon_tajhizat_terrafici.adamak_terrafici_value' => 'nullable|numeric|required_if:signs_equipment_operation_area.kamiyoon_tajhizat_terrafici.have_nothave,9',
+            'signs_equipment_operation_area.tabloo_kamiyoon.have_nothave' => 'required|in:9,10',
+            'signs_equipment_operation_area.tabloo_kamiyoon.adamak_terrafici_value' => 'nullable|numeric|required_if:signs_equipment_operation_area.tabloo_kamiyoon.have_nothave,9',
+            'signs_equipment_operation_area.khatkeshi_zard_zebra.have_nothave' => 'required|in:9,10',
+            'signs_equipment_operation_area.khatkeshi_zard_zebra.adamak_terrafici_value' => 'nullable|numeric|required_if:signs_equipment_operation_area.khatkeshi_zard_zebra.have_nothave,9',
+            'signs_equipment_operation_area.soratgir.have_nothave' => 'required|in:9,10',
+            'signs_equipment_operation_area.soratgir.adamak_terrafici_value' => 'nullable|numeric|required_if:signs_equipment_operation_area.soratgir.have_nothave,9',
+            'signs_equipment_operation_area.khatkeshi_zard_zebra.have_nothave' => 'required|in:9,10',
+            'signs_equipment_operation_area.khatkeshi_zard_zebra.adamak_terrafici_value' => 'nullable|numeric|required_if:signs_equipment_operation_area.khatkeshi_zard_zebra.have_nothave,9',
+
+
+            'signs_equipment_operation_area.jadde_enherafi.jadde_enherafi_value.have_nothave' => 'required|in:9,10',
+            'signs_equipment_operation_area.jadde_enherafi.jadde_enherafi_value.jadde_enherafi_type_color' => 'nullable|string|required_if:signs_equipment_operation_area.jadde_enherafi.jadde_enherafi_value.have_nothave,9',
+            'signs_equipment_operation_area.jadde_enherafi.jadde_enherafi_value.jadde_enherafi_company_color' => 'nullable|string|required_if:signs_equipment_operation_area.jadde_enherafi.jadde_enherafi_value.have_nothave,9',
 
         ];
         $validator = Validator::make($json_de, $rules);
@@ -621,19 +756,61 @@ class ContractorRequestController extends Controller
         $json_test = json_encode($json_test, true);
 
         if ($validator->passes()) {
-            $res = ContractorRequestsCycle::create([
-                'contractor_request_id' => $contractor_request_id,
-                'user_id' => $user_id,
-                'checklist_id' => $checklist_id,
-                'checklist_item_detail_id' =>$json_test
-            ]);
-            if ($res) {
-                return response()->json([
-                    'data' => [
-                        'message' => 'رکورد مورد نظر با موفقیت ایجاد شد'
-                    ],
-                ], 201);
+            $contractor_request = ContractorRequest::find($contractor_request_id);
+            $exist_contract_request_checklist =
+                ContractorRequestsCycle::query()
+                ->where('contractor_request_id','=',$contractor_request_id)
+                ->where('checklist_id','=',$checklist_id)
+                ->first();
+            if (is_null($exist_contract_request_checklist)){
+                if ($checklist_id==4){
+                     ContractorRequestsCycle::create([
+                        'contractor_request_id' => $contractor_request_id,
+                        'user_id' => $user_id,
+                        'checklist_id' => $checklist_id,
+                        'checklist_item_detail_id' =>$json_test
+                    ]);
+                     $contractor_request->update([
+                       'status'=>5
+                   ]);
+                }
+                elseif ($checklist_id==5){
+                    ContractorRequestsCycle::create([
+                        'contractor_request_id' => $contractor_request_id,
+                        'user_id' => $user_id,
+                        'checklist_id' => $checklist_id,
+                        'checklist_item_detail_id' =>$json_test
+                    ]);
+                    $contractor_request->update([
+                        'status'=>6
+                    ]);
+                }
+                    return response()->json([
+                        'data' => [
+                            'message' => 'رکورد مورد نظر با موفقیت ایجاد شد'
+                        ],
+                    ], 201);
+
+
             }
+            elseif (!is_null($exist_contract_request_checklist))
+            {
+               $res1 =  $exist_contract_request_checklist->update([
+                    'contractor_request_id' => $contractor_request_id,
+                    'user_id' => $user_id,
+                    'checklist_id' => $checklist_id,
+                    'checklist_item_detail_id' =>$json_test
+                ]);
+                if ($res1) {
+                    return response()->json([
+                        'data' => [
+                            'message' => 'رکورد مورد نظر با موفقیت ویرایش شد'
+                        ],
+                    ], 201);
+                }
+            }
+
+
         } else if ($validator->fails()) {
             return response($validator->messages(), 422);
         }
@@ -717,11 +894,11 @@ class ContractorRequestController extends Controller
                 "checklist_item_detail_id.details_notification_messages.0.traffic_changes.yes_no" => "required|in:1,2",
                 "checklist_item_detail_id.details_notification_messages.0.contact_numbers_administrators_trustees_question.0.yes_no" => "required|in:1,2",
                 "checklist_item_detail_id.details_notification_messages.0.contact_numbers_administrators_trustees_question.0.person" =>
-                    "nullable|required_if:details_notification_messages.0.contact_numbers_administrators_trustees_question.0.yes_no,==,1|string|min:3|max:1024",
+                    "nullable|required_if:checklist_item_detail_id.details_notification_messages.0.contact_numbers_administrators_trustees_question.0.yes_no,==,1|string|min:3|max:1024",
                 "checklist_item_detail_id.details_notification_messages.0.contact_numbers_administrators_trustees_question.0.position" =>
-                    "nullable|required_if:details_notification_messages.0.contact_numbers_administrators_trustees_question.0.yes_no,==,1|string|min:3|max:1024",
+                    "nullable|required_if:checklist_item_detail_id.details_notification_messages.0.contact_numbers_administrators_trustees_question.0.yes_no,==,1|string|min:3|max:1024",
                 "checklist_item_detail_id.details_notification_messages.0.contact_numbers_administrators_trustees_question.0.phone_number" =>
-                    ['nullable', 'required_if:details_notification_messages.0.contact_numbers_administrators_trustees_question.0.yes_no,==,1','regex:/(09)[0-9]{9}/'],
+                    ['nullable', 'required_if:checklist_item_detail_id.details_notification_messages.0.contact_numbers_administrators_trustees_question.0.yes_no,==,1','regex:/(09)[0-9]{9}/'],
                 "checklist_item_detail_id.details_notification_messages.0.contact_number_emergency_services.yes_no" => "required|in:1,2",
             ];
         }
