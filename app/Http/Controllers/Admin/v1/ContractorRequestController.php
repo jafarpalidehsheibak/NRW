@@ -135,7 +135,7 @@ class ContractorRequestController extends Controller
 //       dd(auth('api')->user()->id);
         $province_id = DB::table('users')
             ->join('profiles', 'profiles.user_id', '=', 'users.id')
-            ->where('users.id', '=', auth('api')->user()->id)
+            ->where('users.id', '=', Auth::user()->id)
             ->select('profiles.province_id')
             ->get();
 //        dd($province_id);

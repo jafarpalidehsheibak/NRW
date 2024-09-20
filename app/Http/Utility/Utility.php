@@ -34,7 +34,7 @@ class Utility
             $jwt_de = JWT::decode($jwt, new Key($key, 'HS256'));
             $id_user_en =$jwt_de->data->id;
             $id_user_en =Crypt::decrypt($id_user_en);
-            $user = User::find($id_user_en)->first();
+            $user = User::find($id_user_en);
             return [
                 'user_id'=>$user->id,
                 'role_id'=>$user->role_id,

@@ -68,44 +68,5 @@ class AuthContractorController extends Controller
         }
     }
 
-    public function me(Request $request)
-    {
-        if ($request->hasHeader('Authorization'))
-        {
-            $access_token = $request->header('Authorization');
-            $token = substr($access_token,'7',strlen($access_token));
-            try {
-                $util = new Utility();
-                $user_id =  $util->decode_jwt_id($token);
-                if ($user_id=='Expired_token'){
-                    return response()->json([
-                        'data' => [
-                            'msg' => 'داده های ورودی نامعتبر است',
-                        ]
-                    ]);
-                }
-                $user = User::find($user_id)->first();
-                return response()->json([
-                    'name'=>$user->name,
-                    'username'=>$user->email,
-                ]) ;
-            }
-            catch (\Exception $exception) {
-                return response()->json([
-                    'data' => [
-                        'msg' => 'داده های ورودی نامعتبر است',
-                    ]
-                ]);
-            }
-        }
-      else
-      {
-          return response()->json([
-              'data' => [
-                  'msg' => 'داده های ورودی نامعتبر است',
-              ]
-          ]);
-      }
 
-    }
 }

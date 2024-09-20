@@ -87,10 +87,6 @@ Route::group(['prefix'=>'v1'],function (){
     Route::post('/show_contract_request',[ContractorRequestCycleController::class,'show_contract_request']);
     Route::post('/update_safety_consultant',[ContractorRequestCycleController::class,'update_safety_consultant']);
 
-
-
-
     Route::post('/login_contractor',[AuthContractorController::class,'login_contractor']);
-    Route::post('/me',[AuthContractorController::class,'me']);
 
 });

@@ -345,6 +345,7 @@ return [
         'checklist_item_detail_id.start_date'=>'تاریخ شروع',
         'checklist_item_detail_id.start_time_hours'=>'هنگامه شروع (ساعت)',
         'checklist_item_detail_id.start_time_day'=>'هنگامه شروع (روز)',
+        'role_id'=>'نقش کاربر',
 
 
 

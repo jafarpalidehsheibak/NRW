@@ -3,8 +3,10 @@
 namespace App\Http\Middleware;
 
 use App\Http\Utility\Utility;
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthUserMiddleware
@@ -25,6 +27,8 @@ class AuthUserMiddleware
                 $user = $user->decode_jwt_id($token);
                 if($user['role_id']==6)
                 {
+                    $userInfo = User::find($user['user_id']);
+                    Auth::login($userInfo);
                     return $next($request);
                 }
                 else

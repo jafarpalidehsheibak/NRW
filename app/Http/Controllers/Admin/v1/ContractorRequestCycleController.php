@@ -12,15 +12,16 @@ use Illuminate\Support\Facades\DB;
 
 class ContractorRequestCycleController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['AuthUserMiddleware'])->except('store');
+    }
     public function show_contract_request(Request $request)
     {
         $this->validate($request,[
-            'token'=>'required',
             'contractor_request_id'=>'required'
         ]);
         try {
-        $util = new Utility();
-        $res1 = $util->decode_jwt_id($request->input('token'));
         $contractor_request_id = Crypt::decrypt($request->input('contractor_request_id'));
             $res = DB::table('contractor_requests')
                 ->join('provinces', 'contractor_requests.province_id', '=', 'provinces.id')
@@ -53,13 +54,10 @@ class ContractorRequestCycleController extends Controller
     public function update_safety_consultant(Request $request)
     {
         $this->validate($request,[
-            'token'=>'required',
             'contractor_request_id'=>'required',
             'safety_consultant_id'=>'required|exists:users,id',
         ]);
         try {
-            $util = new Utility();
-             $util->decode_jwt_id($request->input('token'));
             $contractor_request_id = $request->input('contractor_request_id');
             $ContractorRequestItem = ContractorRequest::find($contractor_request_id);
             $updated_ContractorRequest = $ContractorRequestItem->update([

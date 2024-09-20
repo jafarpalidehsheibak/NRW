@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Http\Utility\Utility;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -15,24 +16,88 @@ class AuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login']]);
+        $this->middleware('AuthAdminMiddleware', ['except' => ['login','me']]);
     }
 
-    public function login()
+    public function login(Request $request)
     {
-        $credentials = request(['email', 'password']);
-        if (!$token = auth('api')->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
+        $this->validate($request,[
+            'email'=>'required|regex:/(09)[0-9]{9}/|digits:11|numeric',
+            'password'=>'required',
+            'role_id'=>'required|numeric',
+        ]);
+        $email = $request->input('email');
+        $role_id = $request->input('role_id');
+        $password = $request->input('password');
+        $user = User::query()
+            ->where('email',$email)
+            ->where('role_id',$role_id)
+            ->first();
 
-        return $this->respondWithToken($token);
+        if ($user){
+            if (Hash::check($password,$user->password)){
+                $util = new Utility();
+                $token = $util->create_jwt($user->id);
+                return response()->json([
+                    'token'=>$token,
+                ]);
+            }
+            else{
+                return response()->json([
+                    'data' => [
+                        'message' => 'نام کاربری یا رمز عبور اشتباه است'
+                    ],
+                ], 401);
+            }
+        }
+        else
+        {
+            return response()->json([
+                'data' => [
+                    'message' => 'نام کاربری یا رمز عبور اشتباه است'
+                ],
+            ], 401);
+        }
     }
 
     public function me(Request $request)
     {
-
-        $user = new UserResource(auth('api')->user());
-        return response()->json($user);
+        if ($request->hasHeader('Authorization'))
+        {
+            $access_token = $request->header('Authorization');
+            $token = substr($access_token,'7',strlen($access_token));
+            try {
+                $util = new Utility();
+                $user_id =  $util->decode_jwt_id($token);
+                if ($user_id=='Expired_token'){
+                    return response()->json([
+                        'data' => [
+                            'msg' => 'داده های ورودی نامعتبر است',
+                        ]
+                    ]);
+                }
+                $user = User::find($user_id)->first();
+                return response()->json([
+                    'name'=>$user->name,
+                    'username'=>$user->email,
+                ]) ;
+            }
+            catch (\Exception $exception) {
+                return response()->json([
+                    'data' => [
+                        'msg' => 'داده های ورودی نامعتبر است',
+                    ]
+                ]);
+            }
+        }
+        else
+        {
+            return response()->json([
+                'data' => [
+                    'msg' => 'داده های ورودی نامعتبر است',
+                ]
+            ]);
+        }
     }
 
     public function logout()
