@@ -37,5 +37,6 @@ class ContractorRequest extends Model
         'acd',
         'seen_date',
         'safety_consultant_id',
+        'password',
     ];
 }

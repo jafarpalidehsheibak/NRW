@@ -2,9 +2,11 @@
 
 namespace App\Http\Utility;
 
+use App\Models\User;
 use Carbon\Carbon;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+use Illuminate\Support\Facades\Crypt;
 
 class Utility
 {
@@ -18,7 +20,7 @@ class Utility
             "iat" => $timestamp,
             "exp" => $exp,
             'data' => [
-                'id' => $id
+                'id' => Crypt::encrypt($id)
             ]
         );
         $jwt = JWT::encode($payload, $key, 'HS256');
@@ -30,7 +32,13 @@ class Utility
         try {
             $key = env('JWT_SECRET');
             $jwt_de = JWT::decode($jwt, new Key($key, 'HS256'));
-            return $jwt_de->data->id;
+            $id_user_en =$jwt_de->data->id;
+            $id_user_en =Crypt::decrypt($id_user_en);
+            $user = User::find($id_user_en)->first();
+            return [
+                'user_id'=>$user->id,
+                'role_id'=>$user->role_id,
+            ];
         } catch (\Exception $exception) {
             return 'Expired_token';
         }

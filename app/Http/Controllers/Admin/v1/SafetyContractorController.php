@@ -16,12 +16,11 @@ class SafetyContractorController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api');
+        $this->middleware('AuthAdminMiddleware');
     }
 
     public function index()
     {
-//        $safety_contractor = SafetyContractor::where('role_id', '=', 5)->paginate(10);
         $safety_contractor = DB::table('users')
             ->join('profiles', 'users.id', '=', 'profiles.user_id')
             ->join('roles', 'roles.id', '=', 'users.role_id')
