@@ -40,6 +40,9 @@ class AuthController extends Controller
                 $token = $util->create_jwt($user->id);
                 return response()->json([
                     'token'=>$token,
+                    'name'=>$user->name,
+                    'username'=>$user->email,
+                    'role_id'=>$user->role_id,
                 ]);
             }
             else{
@@ -80,6 +83,7 @@ class AuthController extends Controller
                 return response()->json([
                     'name'=>$user->name,
                     'username'=>$user->email,
+                    'role_id'=>$user->role_id,
                 ]) ;
             }
             catch (\Exception $exception) {
