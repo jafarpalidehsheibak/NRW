@@ -26,7 +26,7 @@ class ContractorRequestController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['AuthAdminMiddleware'])->except('store');
+        $this->middleware(['AuthAdminMiddleware'])->except('store','testjsonvalidate');
     }
 
     public function store(Request $request)
