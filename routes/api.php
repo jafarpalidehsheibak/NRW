@@ -89,5 +89,6 @@ Route::group(['prefix'=>'v1'],function (){
 
     Route::post('/login_contractor',[AuthContractorController::class,'login_contractor']);
     Route::post('/show_all_safety_consultant',[ContractController::class,'show_all_safety_consultant']);
+    Route::get('/group_constant',[ContractController::class,'group_constant']);
 
 });

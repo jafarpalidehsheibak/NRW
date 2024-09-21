@@ -32,6 +32,18 @@ class ContractController extends Controller
             new SafetyConsultantCollection($safety_consultant)
             , 200);
     }
+    public function group_constant()
+    {
+        $group_constant =DB::table('constant')
+            ->where('id_group', '!=', 0)
+            ->orderBy('id','desc')
+            ->get();
+
+        return response()->json([
+                'data'=>$group_constant
+        ]
+            , 200);
+    }
     public function checklist_all_request(Request $request)
     {
         $contractor_request_id = $request->input('contractor_request_id');
