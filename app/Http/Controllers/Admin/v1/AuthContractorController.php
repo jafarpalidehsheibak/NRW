@@ -35,10 +35,9 @@ class AuthContractorController extends Controller
                     $passdb = $val->password;
                     if (Hash::check($passInput,$passdb)){
                         $util = new Utility();
-                        $token = $util->create_jwt($val->userid);
+                        $token = $util->create_jwt($val->userid,$val->id);
                         return response()->json([
                             'token'=>$token,
-                            'contractor_request_id'=>Crypt::encrypt($val->id),
                             'contractor_name'=>$val->contractor_name
                         ]);
                     }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\SupervisorCollection;
 use App\Http\Resources\SupervisorResource;
 use App\Http\Resources\UserResource;
+use App\Http\Utility\Utility;
 use App\Models\Profile;
 use App\Models\Supervisor;
 use Illuminate\Http\Request;
@@ -20,7 +21,7 @@ class SupervisorController extends Controller
         $this->middleware('AuthAdminMiddleware');
     }
 
-    public function index()
+    public function index(Request $request)
     {
 //        $supervisors = Supervisor::where('role_id', '=', 3)->paginate(10);
         $supervisors = DB::table('users')
