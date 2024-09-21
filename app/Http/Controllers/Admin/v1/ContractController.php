@@ -34,7 +34,7 @@ class ContractController extends Controller
     }
     public function group_constant()
     {
-        $group_constant =DB::table('constant')
+        $group_constant =DB::table('constants')
             ->where('id_group', '!=', 0)
             ->orderBy('id','desc')
             ->get();
