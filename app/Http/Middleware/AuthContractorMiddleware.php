@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class AuthUserMiddleware
+class AuthContractorMiddleware
 {
     /**
      * Handle an incoming request.
@@ -25,8 +25,7 @@ class AuthUserMiddleware
                 $token = substr($access_token,'7',strlen($access_token));
                 $user = new Utility();
                 $user = $user->decode_jwt_id($token);
-                dd($user);
-                if($user['role_id']==6)
+                if($user['role_id']==3)
                 {
                     $userInfo = User::find($user['user_id']);
                     Auth::login($userInfo);

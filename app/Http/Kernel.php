@@ -68,5 +68,6 @@ class Kernel extends HttpKernel
         'ShowContractorRequestMiddleware' => \App\Http\Middleware\ShowContractorRequestMiddleware::class,
         'AuthUserMiddleware' => \App\Http\Middleware\AuthUserMiddleware::class,
         'AuthAdminMiddleware' => \App\Http\Middleware\AuthAdminMiddleware::class,
+        'AuthContractorMiddleware' => \App\Http\Middleware\AuthContractorMiddleware::class,
     ];
 }

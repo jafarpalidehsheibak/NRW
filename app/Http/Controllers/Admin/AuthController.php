@@ -69,9 +69,11 @@ class AuthController extends Controller
         {
             $access_token = $request->header('Authorization');
             $token = substr($access_token,'7',strlen($access_token));
+//            dd($token);
             try {
                 $util = new Utility();
                 $user_id =  $util->decode_jwt_id($token);
+//                dd($user_id);
                 if ($user_id=='Expired_token'){
                     return response()->json([
                         'data' => [
