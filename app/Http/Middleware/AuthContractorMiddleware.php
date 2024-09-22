@@ -25,7 +25,13 @@ class AuthContractorMiddleware
                 $token = substr($access_token,'7',strlen($access_token));
                 $user = new Utility();
                 $user = $user->decode_jwt_id($token);
-                if($user['role_id']==3)
+
+                if ($user =='Expired_token'){
+                    return response()->json([
+                        'msg'=>'Expired_token'
+                    ]) ;
+                }
+                elseif($user['role_id']==3)
                 {
                     $userInfo = User::find($user['user_id']);
                     Auth::login($userInfo);
