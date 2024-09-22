@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\RoadTypeCollection;
 use App\Http\Resources\SafetyConsultantCollection;
 use App\Models\ContractorRequest;
 use App\Models\ContractorRequestsCycle;
@@ -31,6 +32,13 @@ class ContractController extends Controller
         return response()->json(
             new SafetyConsultantCollection($safety_consultant)
             , 200);
+    }
+    public function contractor_request_road()
+    {
+        $res = DB::table('road_type')->where('parent_id', 0)->paginate(10);
+        return response()->json(
+            new RoadTypeCollection($res)
+        );
     }
     public function group_constant()
     {
