@@ -173,6 +173,13 @@ class ContractorRequestController extends Controller
             new RoadTypeCollection($res)
         );
     }
+    public function road_type()
+    {
+        $res = DB::table('road_type')->where('parent_id', 0)->paginate(10);
+        return response()->json(
+            new RoadTypeCollection($res)
+        );
+    }
 
     public function contractor_request_road_importance(Request $request)
     {
