@@ -16,7 +16,7 @@ class ContractController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['AuthContractorMiddleware']);
+        $this->middleware(['AuthContractorMiddleware'])->except('get_contract_password');
     }
     public function show_all_safety_consultant()
     {
