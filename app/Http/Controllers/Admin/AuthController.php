@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Http\Utility\Utility;
+use App\Models\ContractorRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -73,7 +74,6 @@ class AuthController extends Controller
             try {
                 $util = new Utility();
                 $user_id =  $util->decode_jwt_id($token);
-//                dd($user_id);
                 if ($user_id=='Expired_token'){
                     return response()->json([
                         'data' => [
@@ -81,11 +81,21 @@ class AuthController extends Controller
                         ]
                     ]);
                 }
-                $user = User::find($user_id)->first();
+                $iduser=$user_id['user_id'];
+                $contractor_requests_id=$user_id['contractor_requests_id'];
+
+                $user = User::find($iduser);
+                if (!empty($contractor_requests_id)){
+                    $row=ContractorRequest::find($contractor_requests_id);
+                    $statuscontractor=$row->status;
+                }else{
+                    $statuscontractor=0;
+                }
                 return response()->json([
                     'name'=>$user->name,
                     'username'=>$user->email,
                     'role_id'=>$user->role_id,
+                    'statuscontractor'=>$statuscontractor,
                 ]) ;
             }
             catch (\Exception $exception) {
